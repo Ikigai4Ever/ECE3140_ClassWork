@@ -15,7 +15,7 @@ Z2 DPx4 ieee 15 std_logic_arith 0 22 [G314=:2zXJ`VORJe1J@Z1
 Z3 DPx4 ieee 16 std_logic_signed 0 22 C<aanc0R`<LWPSe[JYRP^3
 Z4 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
 Z5 DPx4 ieee 14 std_logic_1164 0 22 cVAk:aDinOX8^VGI1ekP<3
-!i122 0
+!i122 6
 R0
 Z6 8../Addern.vhd
 Z7 F../Addern.vhd
@@ -25,9 +25,9 @@ VVZcGXU4dD3_>X:GB0S9An3
 !s100 2KRK1U;=jDlaZ6J7=8:4_0
 Z8 OV;C;2020.1;71
 32
-Z9 !s110 1739770452
+Z9 !s110 1739770863
 !i10b 1
-Z10 !s108 1739770452.000000
+Z10 !s108 1739770863.000000
 Z11 !s90 -reportprogress|300|../Addern.vhd|
 Z12 !s107 ../Addern.vhd|
 !i113 1
@@ -38,7 +38,7 @@ R3
 R4
 R5
 DEx4 work 6 addern 0 22 VZcGXU4dD3_>X:GB0S9An3
-!i122 0
+!i122 6
 l16
 L14 7
 VoZB5>FNWCGoVM=^Ek^<jM1
@@ -58,7 +58,7 @@ R2
 R3
 R4
 R5
-!i122 1
+!i122 7
 R0
 Z14 8testbench.vht
 Z15 Ftestbench.vht
@@ -72,7 +72,7 @@ R9
 !i10b 1
 R10
 Z16 !s90 -reportprogress|300|testbench.vht|
-!s107 testbench.vht|
+Z17 !s107 testbench.vht|
 !i113 1
 R13
 Abehavior
@@ -80,18 +80,18 @@ R2
 R3
 R4
 R5
-DEx4 work 9 testbench 0 22 4HEm;e8eeXzGO9Ii`>i221
-!i122 1
+Z18 DEx4 work 9 testbench 0 22 4HEm;e8eeXzGO9Ii`>i221
+!i122 7
 l22
-L8 33
-VGZDFF>bkg`YUomV8aIB8C3
-!s100 65F@@]QEFQT9Q^RYIkgiA3
+Z19 L8 33
+Z20 VGZDFF>bkg`YUomV8aIB8C3
+Z21 !s100 65F@@]QEFQT9Q^RYIkgiA3
 R8
 32
 R9
 !i10b 1
 R10
 R16
-Z17 !s107 testbench.vht|
+R17
 !i113 1
 R13
