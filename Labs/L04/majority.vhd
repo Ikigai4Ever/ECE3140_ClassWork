@@ -1,4 +1,4 @@
-LIBRARY IEEE;
+	LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 
 --majority entitiy definition
