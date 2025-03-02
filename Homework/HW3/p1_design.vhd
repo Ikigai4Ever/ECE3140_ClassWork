@@ -14,7 +14,7 @@ architecture rtl of or_nand is
     
     component or2
         port(In1, In2   :   IN std_logic;
-             Out1,      :   OUT std_logic);
+             Out1      :   OUT std_logic);
     end component;
 
     component nand2
@@ -31,6 +31,9 @@ end rtl;
 
 
 --Description of or2 gate
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+
 entity or2 is
     port (In1, In2  : IN std_logic;
           Out1      : OUT std_logic);
@@ -39,9 +42,12 @@ end or2;
 architecture rtl of or2 is 
     begin        
         Out1 <= In1 or In2;
-end rtl;
+end architecture rtl;
 
 --Descritption of nand gate
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+
 entity nand2 is 
     port (In1, In2  : IN std_logic;
           Out1      : OUT std_logic);
@@ -50,5 +56,5 @@ end nand2;
 architecture rtl of nand2 is 
     begin
         Out1 <= In1 nand In2;
-end rtl;
+end architecture rtl;
 
