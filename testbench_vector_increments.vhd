@@ -58,9 +58,11 @@ end architecture BENCH;
 
 ---------------------------------------------------------------------
 
+
+
 ---------------------------------------------------------------------
 -- Name: 3-bit testbench incrementer
--- Purpose: Process for testbench with 3-bits
+-- Purpose: Process for testbench with 3-bits and assert output
 
 architecture BENCH of testbench is 
     signal I : std_logic_vector(2 downto 0);
