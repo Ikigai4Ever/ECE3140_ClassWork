@@ -64,12 +64,14 @@ architecture BENCH of testbench is
             I <= "1000";
             report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
             wait for 10ns;
-            
+            report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
             I <= "0000";
+            
+            report "Program Finished";
             wait;
             
     end process stimulus;
          
-	DUT0: entity work.grayToBinary(rtl) port map (I(3)=>w, I(2)=>x, I(1)=>y, I(0)=>z, O(3)=>A, O(2)=>B, O(1)=>C, O(0)=>D); 
+	DUT0: entity work.grayToBinary port map (I(3), I(2), I(1), I(0), O(3), O(2), O(1), O(0)); 
                                                      
 end architecture BENCH;
