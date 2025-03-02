@@ -23,39 +23,39 @@ architecture BENCH of testbench is
             wait for 10 ns;
             I <= "0001";
             wait for 10 ns;
-            I <= "0011";
-            wait for 10 ns;
             I <= "0010";
             wait for 10 ns;
+            I <= "0011";
+            wait for 10 ns;
 
+            I <= "0100";
+            wait for 10 ns;
+            I <= "0101";
+            wait for 10 ns;
             I <= "0110";
             wait for 10 ns;
             I <= "0111";
             wait for 10 ns;
-            I <= "0101";
+
+            I <= "1000";
             wait for 10 ns;
-            I <= "0100";
+            I <= "1001";
+            wait for 10 ns;
+            I <= "1010";
+            wait for 10 ns;
+            I <= "1011";
             wait for 10 ns;
 
             I <= "1100";
             wait for 10 ns;
             I <= "1101";
             wait for 10 ns;
-            I <= "1111";
-            wait for 10 ns;
             I <= "1110";
             wait for 10 ns;
+            I <= "1111";
+            wait for 10 ns;
 
-            I <= "1010";
-            wait for 10 ns;
-            I <= "1011";
-            wait for 10 ns;
-            I <= "1001";
-            wait for 10 ns;
-            I <= "1000";
-            wait for 10 ns;
             I <= "0000";
-
             report "Program Finished";
             wait;
 
