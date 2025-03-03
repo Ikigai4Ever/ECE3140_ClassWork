@@ -4,13 +4,14 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
-entity sevenSegEncoder is
+entity sevenSegDecoder is
     port(w, x, y, z : IN std_logic;
          a, b, c, d, e, f, g   : OUT std_logic);
-end sevenSegEncoder;
+end sevenSegDecoder;
 
 
-architecture rtl of sevenSegEncoder is
+architecture rtl of sevenSegDecoder is
+    signal out_a, out_b, out_c, out_d, out_e, out_f, out_g :std_logic;
     signal a1, a2, a3, a4 : std_logic;
     signal b1, b2, b3 : std_logic;
     signal c1, c2, c3 : std_logic;
@@ -51,6 +52,15 @@ architecture rtl of sevenSegEncoder is
     end component or2;
 
     begin
+        -- assign output signals
+        a <= out_a;
+        b <= out_b;
+        c <= out_c;
+        d <= out_d;
+        e <= out_e;
+        f <= out_f;
+        g <= out_g;
+
         -- Create not of each input
         U0: not1 port map (In1 => w, Out1 => not_w);
         U1: not1 port map (In1 => x, Out1 => not_x);
@@ -62,37 +72,37 @@ architecture rtl of sevenSegEncoder is
         U5: and3 port map (In1 => w, In2 => not_x, In3 => not_y, Out1 => a2); -- wx'y'
         U6: and3 port map (In1 => not_w, In2 => x, In3 => z, Out1 => a3); -- w'xz
         U7: and3 port map (In1 => not_w, In2 => not_x, In3 => not_z, Out1 => a4); -- w'x'z'
-        U8: or4 port map (In1 => a1, In2 => a2, In3 => a3, In4 => a4, Out1 => a);
+        U8: or4 port map (In1 => a1, In2 => a2, In3 => a3, In4 => a4, Out1 => out_a);
 
         -- Output for b
         U9: and2 port map (In1 => not_w, In2 => not_x, Out1 => b1); -- w'x'
         U10: and3 port map (In1 => not_w, In2 => y, In3 => z, Out1 => b2); -- w'yz
         U11: and3 port map (In1 => not_w, In2 => not_y, In3 => not_z, Out1 => b3); -- w'y'z' 
-        U12: or4 port map (In1 => b1, In2 => b2, In3 => b3, In4 => a2, Out1 => b);
+        U12: or4 port map (In1 => b1, In2 => b2, In3 => b3, In4 => a2, Out1 => out_b);
 
         -- Output for c
         U13: and2 port map (In1 => not_w, In2 => z, Out1 => c1); -- w'z
         U14: and2 port map (In1 => not_x, In2 => not_y, Out1 => c2); -- x'y'
         U15: and3 port map (In1 => not_w, In2 => x, In3 => y, Out1 => c3); -- w'xy
-        U16: or3 port map (In1 => c1, In2 => c2, In3 => c3, Out1 => c);
+        U16: or3 port map (In1 => c1, In2 => c2, In3 => c3, Out1 => out_c);
 
         -- Output for d
         U17: and2 port map (In1 => not_w, In2 => not_z, Out1 => d1); -- w'z'
         U18: and3 port map (In1 => not_w, In2 => not_x, In3 => y, Out1 => d2); -- w'x'y
         U19: and3 port map (In1 => not_w, In2 => x, In3 => not_y, Out1 => d3); -- w'xy'
-        U20: or4 port map (In1 => d1, In2 => d2, In3 => d3, In4 => a2, Out1 => d);
+        U20: or4 port map (In1 => d1, In2 => d2, In3 => d3, In4 => a2, Out1 => out_d);
 
         -- Output for e
         U21: and3 port map (In1 => not_w, In2 => y, In3 => not_z, Out1 => e1); -- w'yz'
         U22: and3 port map (In1 => not_x, In2 => not_y, In3 => not_z, Out1 => e2); -- x'y'z'
-        U23: or2 port map (In1 => e1, In2 => e2, Out1 => e);
+        U23: or2 port map (In1 => e1, In2 => e2, Out1 => out_e);
 
         -- Output for f
         U24: and3 port map (In1 => not_w, In2 => x, In3 => not_z, Out1 => f1); -- w'xz'
-        U25: or4 port map (In1 => b3, In2 => d3, In3 => f1, In4 => a2, Out1 => f); 
+        U25: or4 port map (In1 => b3, In2 => d3, In3 => f1, In4 => a2, Out1 => out_f); 
 
         -- Output for g
-        U26: or4 port map (In1 => d2, In2 => e1, In3 => d3, In4 => a2, Out1 => g);
+        U26: or4 port map (In1 => d2, In2 => e1, In3 => d3, In4 => a2, Out1 => out_g);
 
 end rtl;
 
@@ -151,7 +161,7 @@ entity or3 is
           Out1          : OUT std_logic);
 end or3;
 
-architecture rtl of or2 is
+architecture rtl of or3 is
     begin 
         Out1 <= In1 or In2 or In3;
 end architecture rtl;
@@ -180,3 +190,8 @@ entity not1 is
     port (In1   : IN std_logic;
           Out1  : OUT std_logic);
 end not1;
+
+architecture rtl of not1 is 
+    begin 
+        Out1 <= not In1;
+end architecture rtl;

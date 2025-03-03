@@ -6,9 +6,9 @@ entity testbench is
 end entity testbench;
 
 architecture BENCH of testbench is 
-    component grayToBinary is 
-        port(w, x, y, z	: in std_logic;
-             a, b, c, d, e, f, g : out std_logic);
+    component sevenSegDecoder is 
+        port(w, x, y, z	: IN std_logic;
+             a, b, c, d, e, f, g : OUT std_logic);
     end component;
 
 	signal I : std_logic_vector(3 downto 0);
@@ -16,7 +16,7 @@ architecture BENCH of testbench is
     
 	begin 
 
-    DUT0: grayToBinary port map (I(3), I(2), I(1), I(0), O(6), O(5), O(4), O(3), O(2), O(1), O(0)); 
+    DUT0: sevenSegDecoder port map (I(3), I(2), I(1), I(0), O(6), O(5), O(4), O(3), O(2), O(1), O(0)); 
 
     stimulus : process
     	begin
