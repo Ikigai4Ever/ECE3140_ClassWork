@@ -11,46 +11,52 @@ end F_or_G;
 
 
 architecture rtl of F_or_G is
-    signal F, G, nodeA_NOT, nodeD_NOT, node1, node2F, node2G : std_logic;
+    signal out_F, out_G, nodeA_NOT, nodeD_NOT, node1, node2F, node2G : std_logic;
 
     component and3
         port(In1, In2, In3  : IN std_logic;
              Out1           : OUT std_logic);
-    end component;
+    end component and3;
 
     component and2
         port(In1, In2   : IN std_logic;
              Out1       : OUT std_logic);
-    end component;
+    end component and2;
 
-    component not 
+    component not1 
         port(In1    : IN std_logic;
              Out1   : OUT std_logic);
-    end component;
+    end component not1;
 
     component or2
-        port(In1    : IN std_logic;
-             Out1   : OUT std_logic);
-    end component;
+        port(In1, In2    : IN std_logic;
+             Out1        : OUT std_logic);
+    end component or2;
 
     begin   
-        U0: not port map (In1 => A, Out1 => nodeA_NOT);
-        U1: not port map (In1 => D, Out1 => nodeD_NOT);
+        -- Singal assignment 
+        F <= out_F;
+        G <= out_G;
+
+        U0: not1 port map (In1 => A, Out1 => nodeA_NOT);
+        U1: not1 port map (In1 => D, Out1 => nodeD_NOT);
         
         -- Function F
         U2: and3 port map (In1 => A, In2 => B, In3 => C, Out1 => node1);
         U3: and2 port map (In1 => nodeA_NOT, In2 => D, Out1 => node2F);
-        U4: or2 port map (In1 => node1, In2 => node2F, Out1 => F);
+        U4: or2 port map (In1 => node1, In2 => node2F, Out1 => out_F);
         
         --Function G
         U5: and2 port map (In1 => nodeA_NOT, In2 => nodeD_NOT, Out1 => node2G);
-        U6: or2 port map (In1 => node1, In2 => node2G, Out1 => G);
+        U6: or2 port map (In1 => node1, In2 => node2G, Out1 => out_G);
 
 end rtl;
 
 ------------------------------
 -- Description of and3 gate --
 ------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
 entity and3 is  
     port (In1, In2, In3 : IN std_logic;
           Out1          : OUT std_logic);
@@ -64,6 +70,8 @@ end architecture rtl;
 ------------------------------
 -- Description of and2 gate --
 ------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
 entity and2 is  
     port (In1, In2 : IN std_logic;
           Out1     : OUT std_logic);
@@ -75,21 +83,10 @@ architecture rtl of and2 is
 end architecture rtl;
 
 ------------------------------
--- Description of or3 gate  --
-------------------------------
-entity or3 is  
-    port (In1, In2, In3 : IN std_logic;
-          Out1          : OUT std_logic);
-end or3;
-
-architecture rtl of or3 is
-    begin 
-        Out1 <= In1 or In2 or In3;
-end architecture rtl;
-
-------------------------------
 -- Description of or2 gate  --
 ------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
 entity or2 is  
     port (In1, In2 : IN std_logic;
           Out1     : OUT std_logic);
@@ -103,12 +100,14 @@ end architecture rtl;
 ------------------------------
 -- Description of not gate  --
 ------------------------------
-entity not is  
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+entity not1 is  
     port (In1   : IN std_logic;
           Out1  : OUT std_logic);
-end not;
+end not1;
 
-architecture rtl of not is
+architecture rtl of not1 is
     begin 
         Out1 <= not In1;
 end architecture rtl;
