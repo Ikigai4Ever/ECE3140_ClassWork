@@ -34,7 +34,7 @@ architecture rtl of F_or_G is
     end component or2;
 
     begin   
-        -- Singal assignment 
+        -- Signal assignment 
         F <= out_F;
         G <= out_G;
 
