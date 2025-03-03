@@ -26,7 +26,7 @@ architecture rtl of grayToBinary is
         D <= nodeD;
 
         -- Gray code to Binary 
-        U0: xor2 port map (In1 => w, In2 => '1', Out1 => nodeA);
+        U0: xor2 port map (In1 => w, In2 => '0', Out1 => nodeA);
         U1: xor2 port map (In1 => x, In2 => nodeA, Out1 => nodeB);
         U2: xor2 port map (In1 => y, In2 => nodeB, Out1 => nodeC);
         U3: xor2 port map (In1 => z, In2 => nodeC, Out1 => nodeD);
