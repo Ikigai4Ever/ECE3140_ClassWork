@@ -26,49 +26,49 @@ architecture BENCH of testbench is
             I <= "0001";
             wait for 10 ns;
             assert (O = "0110000") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
-            I <= "0011";
+            I <= "0010";
             wait for 10 ns;
             assert (O = "1101101") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
-            I <= "0010";
+            I <= "0011";
             wait for 10 ns;
             assert (O = "1111001") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
         
-            I <= "0110";
+            I <= "0100";
             wait for 10 ns;
             assert (O = "0101011") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
-            I <= "0111";
-            wait for 10 ns;
-            assert (O = "1011011") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
             I <= "0101";
             wait for 10 ns;
+            assert (O = "1011011") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
+            I <= "0110";
+            wait for 10 ns;
             assert (O = "1011111") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
-            I <= "0100";
+            I <= "0111";
             wait for 10 ns;
             assert (O = "1110000") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
             
-            I <= "1100";
+            I <= "1000";
             wait for 10 ns;
             assert (O = "1111111") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
-            I <= "1101";
+            I <= "1001";
             wait for 10 ns;
             assert (O = "1111011") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
-            I <= "1111";
-            wait for 10 ns;
-            assert (O = "0000000") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
-            I <= "1110";
-            wait for 10 ns;
-            assert (O = "0000000") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
-            
             I <= "1010";
             wait for 10 ns;
             assert (O = "0000000") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
             I <= "1011";
             wait for 10 ns;
             assert (O = "0000000") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
-            I <= "1001";
+            
+            I <= "1100";
             wait for 10 ns;
             assert (O = "0000000") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
-            I <= "1000";
+            I <= "1101";
+            wait for 10 ns;
+            assert (O = "0000000") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
+            I <= "1110";
+            wait for 10 ns;
+            assert (O = "0000000") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
+            I <= "1111";
             wait for 10 ns;
             assert (O = "0000000") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
             

@@ -35,6 +35,16 @@ architecture rtl of sevenSegEncoder is
              Out1   : OUT std_logic);
     end component not1;
 
+    component or4
+        port(In1, In2, In3, In4    : IN std_logic;
+             Out1        : OUT std_logic);
+    end component or4;
+
+    component or3
+        port(In1, In2, In3    : IN std_logic;
+             Out1        : OUT std_logic);
+    end component or3;
+
     component or2
         port(In1, In2    : IN std_logic;
              Out1        : OUT std_logic);
@@ -86,12 +96,6 @@ architecture rtl of sevenSegEncoder is
 
 end rtl;
 
-
-
-
-
-
-
 ------------------------------
 -- Description of and3 gate --
 ------------------------------
@@ -128,13 +132,13 @@ end architecture rtl;
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 entity or4 is  
-    port (In1, In2, In3 : IN std_logic;
+    port (In1, In2, In3, In4 : IN std_logic;
           Out1          : OUT std_logic);
 end or4;
 
 architecture rtl of or4 is
     begin 
-        Out1 <= In1 or In2 or In3 or 4;
+        Out1 <= In1 or In2 or In3 or In4;
 end architecture rtl;
 
 ------------------------------
