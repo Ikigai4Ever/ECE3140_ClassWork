@@ -6,72 +6,77 @@ entity testbench is
 end entity testbench;
 
 architecture BENCH of testbench is 
+    component grayToBinary is 
+        port(w, x, y, z	: in std_logic;
+             A, B, C, D	: out std_logic);
+    end component;
+
 	signal I : std_logic_vector(3 downto 0);
     signal O : std_logic_vector(3 downto 0);
     
 	begin 
-    
+
+    DUT0: grayToBinary port map (I(3), I(2), I(1), I(0), O(3), O(2), O(1), O(0)); 
+
     stimulus : process
     	begin
         	I <= "0000";
-            report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
-            wait for 10ns;
+            wait for 10 ns;
+            assert (O = "0000") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
             I <= "0001";
-            report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
-            wait for 10ns;
+            wait for 10 ns;
+            assert (O = "0001") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
             I <= "0011";
-            report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
-            wait for 10ns;
+            wait for 10 ns;
+            assert (O = "0010") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
             I <= "0010";
-            report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
-            wait for 10ns;
-            
+            wait for 10 ns;
+            assert (O = "0011") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
+        
             I <= "0110";
-            report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
-            wait for 10ns;
+            wait for 10 ns;
+            assert (O = "0100") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
             I <= "0111";
-            report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
-            wait for 10ns;
+            wait for 10 ns;
+            assert (O = "0101") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
             I <= "0101";
-            report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
-            wait for 10ns;
+            wait for 10 ns;
+            assert (O = "0110") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
             I <= "0100";
-            report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
-            wait for 10ns;
+            wait for 10 ns;
+            assert (O = "0111") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
             
             I <= "1100";
-            report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
-            wait for 10ns;
+            wait for 10 ns;
+            assert (O = "1000") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
             I <= "1101";
-            report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
-            wait for 10ns;
+            wait for 10 ns;
+            assert (O = "1001") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
             I <= "1111";
-            report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
-            wait for 10ns;
+            wait for 10 ns;
+            assert (O = "1010") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
             I <= "1110";
-            report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
-            wait for 10ns;
+            wait for 10 ns;
+            assert (O = "1011") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
             
             I <= "1010";
-            report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
-            wait for 10ns;
+            wait for 10 ns;
+            assert (O = "1100") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
             I <= "1011";
-            report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
-            wait for 10ns;
+            wait for 10 ns;
+            assert (O = "1101") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
             I <= "1001";
-            report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
-            wait for 10ns;
+            wait for 10 ns;
+            assert (O = "1110") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
             I <= "1000";
-            report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
-            wait for 10ns;
-            report "The output is " & std_logic'image(O(3)) & std_logic'image(O(2)) & std_logic'image(O(1)) & std_logic'image(O(0));
+            wait for 10 ns;
+            assert (O = "1111") report "Wrong input for " & std_logic'image(I(3)) & std_logic'image(I(2)) & std_logic'image(I(1)) & std_logic'image(I(0));
+            
+
             I <= "0000";
             
             report "Program Finished";
             wait;
             
-    end process stimulus;
-         
-	DUT0: entity work.grayToBinary port map (I(3), I(2), I(1), I(0), O(3), O(2), O(1), O(0)); 
-                                                     
+    end process stimulus;                                                     
 end architecture BENCH;
