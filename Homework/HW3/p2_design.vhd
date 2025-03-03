@@ -1,6 +1,6 @@
 --Name: Ty Ahrens 
---Date: 3/1/2025
---Program: Problem 4.2 from Mano & Ciletti text
+--Date: 3/2/2025
+--Program: Problem 4.4 from Mano & Ciletti text
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
