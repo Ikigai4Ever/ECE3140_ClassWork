@@ -51,11 +51,11 @@ BEGIN
 
     PROCESS ( Clock )
     BEGIN
-        IF Clock’EVENT AND Clock = ’1’ THEN
-            IF Clear = ’1’ THEN BCDq <= "0000" ;
-            ELSIF Ecount = ’1’ THEN
+        IF Clock'EVENT AND Clock = '1' THEN
+            IF Clear = '1' THEN BCDq <= "0000" ;
+            ELSIF Ecount = '1' THEN
                 IF BCDq = "1001" THEN BCDq <= "0000" ;
-                ELSE BCDq <= BCDq + ’1’ ;
+                ELSE BCDq <= BCDq + '1' ;
                 END IF ;
             END IF ;
         END IF ;
@@ -63,8 +63,8 @@ BEGIN
     
     PROCESS ( BCDq )
     BEGIN
-        IF BCDq = "1001" THEN Value9 <= ’1’ ;
-        ELSE Value9 <= ’0’ ;
+        IF BCDq = "1001" THEN Value9 <= '1' ;
+        ELSE Value9 <= '0' ;
         END IF ;
     END PROCESS ;
 

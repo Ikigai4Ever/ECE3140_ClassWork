@@ -19,11 +19,11 @@ BEGIN
     
     PROCESS ( Clock )
     BEGIN
-        IF Clock’EVENT AND Clock = ’1’ THEN
-            IF Clear = ’1’ THEN
-                delay_count <= (OTHERS => ’0’) ;
-            ELSIF Enable = ’1’ THEN
-                delay_count <= delay_count + ’1’ ;
+        IF Clock'EVENT AND Clock = '1' THEN
+            IF Clear = '1' THEN
+                delay_count <= (OTHERS => '0') ;
+            ELSIF Enable = '1' THEN
+                delay_count <= delay_count + '1' ;
             END IF ;
         END IF ;    
     END PROCESS ;

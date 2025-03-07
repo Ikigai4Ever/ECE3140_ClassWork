@@ -4,14 +4,14 @@ USE IEEE.std_logic_unsigned.all;
 
 
 ENTITY reaction_tester IS
-    PORT (CLOCK_50 : IN std_logic
+    PORT (CLOCK_50 : IN std_logic;
           KEY :  IN std_logic_vector(2 DOWNTO 0);
           HEX3, HEX2, HEX1, HEX0 :  OUT std_logic_vector(0 TO 6);
           LEDG : OUT std_logic_vector(0 DOWNTO 0));
 END reaction_tester;
 
 
-ARCHETECTURE top_level OF reaction_tester IS    
+ARCHITECTURE top_level OF reaction_tester IS    
     SIGNAL reset, request_test, stop_test, clear, sec_100th : std_logic;
     SIGNAL run, start_test, test_active, enable_bcd : std_logic;
     SIGNAL BCD3, BCD2, BCD1, BCD0 : std_logic_vector(3 DOWNTO 0);

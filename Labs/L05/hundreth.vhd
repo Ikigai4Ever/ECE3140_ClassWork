@@ -19,13 +19,13 @@ BEGIN
     PROCESS ( Clock )
     BEGIN
 
-        IF Clock’EVENT AND Clock = ’1’ THEN
-            IF Load = ’1’ THEN
+        IF Clock'EVENT AND Clock = '1' THEN
+            IF Load = '1' THEN
                 count_500k <= X"7A120" ;
             ELSE
-                count_500k <= count_500k- ’1’ ;
+                count_500k <= count_500k- '1' ;
             END IF ;
         END IF ;
     END PROCESS ;
-    pulse_500k <= ’1’ WHEN (count_500k = X"00000") ELSE ’0’ ;
+    pulse_500k <= '1' WHEN (count_500k = X"00000") ELSE '0' ;
 END hundredth_circuit ;
