@@ -24,21 +24,22 @@ ARCHETECTURE top_level OF reaction_tester IS
     COMPONENT hundredth
         PORT (Clock, Load : IN STD_LOGIC ;
               pulse_500k : OUT STD_LOGIC ) ;
-    END COMPONENT ;
+    END COMPONENT;
 
     COMPONENT delay_counter
         PORT (Clock, Clear, Enable : IN STD_LOGIC ;
               Start : OUT STD_LOGIC ) ;
-    END COMPONENT ;
+    END COMPONENT;
 
     COMPONENT BCD_counter
         PORT (Clock, Clear, Enable : IN STD_LOGIC ;
               BCD3, BCD2, BCD1, BCD0 : BUFFER STD_LOGIC_VECTOR(3 DOWNTO 0) ) ;
-    END COMPONENT ;
+    END COMPONENT;
+
     COMPONENT bcd7seg
        PORT (bcd : IN STD_LOGIC_VECTOR(3 DOWNTO 0) ;
              display : OUT STD_LOGIC_VECTOR(0 TO 6) ) ;
-    END COMPONENT ;
+    END COMPONENT;
  
 BEGIN
 
@@ -59,4 +60,4 @@ BEGIN
     digit1: bcd7seg PORT MAP(BCD1, HEX1) ;
     digit0: bcd7seg PORT MAP(BCD0, HEX0) ;
 
-END top_level ;
+END top_level;
