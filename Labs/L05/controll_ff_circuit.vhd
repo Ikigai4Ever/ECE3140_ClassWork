@@ -1,3 +1,5 @@
+-- PURPOSE : 28-bit counter 
+
 LIBRARY ieee ;
 USE ieee.std_logic_1164.all ;
 
