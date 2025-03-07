@@ -3,7 +3,7 @@ USE IEEE.std_logic_1164.all;
 USE IEEE.std_logic_unsigned.all;
 
 
-ENTITY reaction_tester IS
+ENTITY reaction_tester IS        
     PORT (CLOCK_50 : IN std_logic;
           KEY :  IN std_logic_vector(2 DOWNTO 0);
           HEX3, HEX2, HEX1, HEX0 :  OUT std_logic_vector(0 TO 6);
@@ -15,6 +15,13 @@ ARCHITECTURE top_level OF reaction_tester IS
     SIGNAL reset, request_test, stop_test, clear, sec_100th : std_logic;
     SIGNAL run, start_test, test_active, enable_bcd : std_logic;
     SIGNAL BCD3, BCD2, BCD1, BCD0 : std_logic_vector(3 DOWNTO 0);
+
+    -- ATTRIBUTE is used if wanting to view waveforms from created circuit
+    -- make sure specify what signals you want to see.
+    ATTRIBUTE keep : BOOLEAN;
+    ATTRIBUTE keep OF run: SIGNAL IS true;
+    ATTRIBUTE keep OF enable_bcd : SIGNAL IS true;
+
 
     COMPONENT control_ff
         PORT(Clock, ff_in, Clear : IN std_logic;
