@@ -1,10 +1,14 @@
+--Name: Ty Ahrens 
+--Date: 3/9/2025
+--Purpose: Program to sent to DE10-LITE board that defines pinnouts and 
+--		   provides real pins for the F_or_G program from M&C 4.2
 library IEEE;
 use IEEE.std_logic_1164.all;
 
 entity hw4p1 is 
 	port (SW	:	IN std_logic_vector(3 downto 0);
-			KEY : IN std_logic_vector(1 downto 0);
-			LEDR	:	OUT std_logic_vector(9 downto 0));
+		  KEY : IN std_logic_vector(1 downto 0);
+	      LEDR	:	OUT std_logic_vector(9 downto 0));
 end hw4p1;
 
 architecture rtl of hw4p1 is
@@ -12,7 +16,7 @@ architecture rtl of hw4p1 is
 	
 	component F_or_G
 		port (A, B, C, D  : IN std_logic;
-				F, G			: OUT std_logic);
+			  F, G			: OUT std_logic);
 	end component;
 	
 	
