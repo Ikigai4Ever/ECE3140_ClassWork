@@ -3,32 +3,31 @@
 --Purpose: Binary 2 bit number to seven segment counter program
 
 library IEEE;
-use IEEE.std_logic_1164.all;
+library IEEE.std_logic_1164.all;
 
 entity bin2seg7 is
     port(inData     :   IN std_logic_vector(3 downto 0);
          blanking, dispHex, dispPoint : IN std_logic; 
-         segA, segB, segC, segD, segE, segF, segG, segPoint : OUT std_logic);
+         segA, segB, segC, segD, segE, segF, segG : OUT std_logic);
 end bin2seg7;
 
-architecture behavioral of bin2seg7 is
+architecture behavioral of bin2seg7
     signal sevenSeg : std_logic_vector(6 downto 0);
 
 begin 
 
-    process (inData, blanking, dispHex, dispPoint)
-		begin
+    process (inData blanking, dispHex, dispPoint)
         if blanking = '1' then
             sevenSeg <= "1111111";
-            segPoint <= '0';
+            dispPoint <= '0';
         else
             --sevenSeg 0 to 9 and a to f
             if dispHex = '1' then   
                 case inData is 
                     when "0000" =>
-                       sevenSeg <= "0000001" ; -- 0
+                        sevenSeg <= "0000001" ; -- 0
                     when "0001" =>
-                       sevenSeg <= "1001111" ; -- 1
+                        sevenSeg <= "1001111" ; -- 1
                     when "0010" =>
                        sevenSeg <= "0010010" ;  -- 2
                     when "0011" =>
@@ -50,7 +49,7 @@ begin
                     when "1011" =>
                         sevenSeg <= "1100000";  -- B
                     when "1100" => 
-                        sevenSeg <= "0110001";  -- C
+                        sevenSeg => "0110001";  -- C
                     when "1101" =>
                         sevenSeg <= "1000010";  -- D
                     when "1110" => 
@@ -87,13 +86,6 @@ begin
                         sevenSeg <= "1111111";  -- Blank
                 END CASE;
             end if;
-				
-				if dispPoint = '1' then
-					segPoint <= '1';
-				else 	
-					segPoint <= '0';
-				end if;
-				
         end if;
 
         -- address each segment to a bit in the sevenSeg vector
