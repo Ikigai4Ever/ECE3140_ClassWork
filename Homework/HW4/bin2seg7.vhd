@@ -16,11 +16,12 @@ architecture behavioral of bin2seg7 is
 
 begin 
 
-    process (inData, blanking, dispHex, dispPoint)
+		process (inData, blanking, dispHex, dispPoint)
+		
 		begin
         if blanking = '1' then
             sevenSeg <= "1111111";
-            segPoint <= '0';
+            segPoint <= '1';
         else
             --sevenSeg 0 to 9 and a to f
             if dispHex = '1' then   
@@ -38,7 +39,7 @@ begin
                     when "0101" =>
                         sevenSeg <= "0100100" ; -- 5
                     when "0110" =>
-                        sevenSeg <= "1100000" ; -- 6
+                        sevenSeg <= "0100000" ; -- 6
                     when "0111" =>
                         sevenSeg <= "0001111" ; -- 7
                     when "1000" =>
@@ -93,17 +94,16 @@ begin
 				else 	
 					segPoint <= '0';
 				end if;
+
 				
         end if;
-
-        -- address each segment to a bit in the sevenSeg vector
-        segA <= sevenSeg(0);
-        segB <= sevenSeg(1);
-        segC <= sevenSeg(2);
-        segD <= sevenSeg(3);
-        segE <= sevenSeg(4);
-        segF <= sevenSeg(5);
-        segG <= sevenSeg(6);
-
     end process;
+	 -- address each segment to a bit in the sevenSeg vector
+	  segA <= sevenSeg(0);
+	  segB <= sevenSeg(1);
+	  segC <= sevenSeg(2);
+	  segD <= sevenSeg(3);
+	  segE <= sevenSeg(4);
+	  segF <= sevenSeg(5);
+	  segG <= sevenSeg(6);
 end behavioral;
