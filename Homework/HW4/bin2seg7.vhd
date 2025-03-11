@@ -7,21 +7,22 @@ use IEEE.std_logic_1164.all;
 
 entity bin2seg7 is
     port(inData     :   IN std_logic_vector(3 downto 0);
-         blanking, dispHex, dispPoint : IN std_logic; 
+         blanking, dispHex : IN std_logic; 
          segA, segB, segC, segD, segE, segF, segG, segPoint : OUT std_logic);
 end bin2seg7;
 
 architecture behavioral of bin2seg7 is
     signal sevenSeg : std_logic_vector(6 downto 0);
+    signal sevenSegPoint : std_logic;
 
 begin 
 
-		process (inData, blanking, dispHex, dispPoint)
+		process (inData, blanking, dispHex)
 		
 		begin
         if blanking = '1' then
             sevenSeg <= "1111111";
-            segPoint <= '1';
+            sevenSegPoint <= '1';
         else
             --sevenSeg 0 to 9 and a to f
             if dispHex = '1' then   
@@ -89,21 +90,17 @@ begin
                 END CASE;
             end if;
 				
-				if dispPoint = '1' then
-					segPoint <= '1';
-				else 	
-					segPoint <= '0';
-				end if;
 
 				
         end if;
     end process;
 	 -- address each segment to a bit in the sevenSeg vector
-	  segA <= sevenSeg(0);
-	  segB <= sevenSeg(1);
-	  segC <= sevenSeg(2);
-	  segD <= sevenSeg(3);
-	  segE <= sevenSeg(4);
-	  segF <= sevenSeg(5);
-	  segG <= sevenSeg(6);
+    segA <= sevenSeg(0);
+    segB <= sevenSeg(1);
+    segC <= sevenSeg(2);
+    segD <= sevenSeg(3);
+    segE <= sevenSeg(4);
+    segF <= sevenSeg(5);
+    segG <= sevenSeg(6);
+	 --segPoint <= sevenSegPoint;
 end behavioral;
