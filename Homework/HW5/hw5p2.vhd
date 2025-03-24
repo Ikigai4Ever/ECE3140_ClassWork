@@ -12,8 +12,6 @@ entity mealey_FSM is
 end mealey_FSM;
 
 architecture behavior of mealey_FSM is 
-    signal SW0, SW9 : std_logic;
-
 
     subtype State_Type is std_logic_vector (1 downto 0);
         --define the different states by giving them a constant value IN VHDL ONLY
@@ -32,8 +30,6 @@ begin
     begin 
         if clockSwitch = '1' then 
             Current_State <= Next_State;
-        else 
-				Current_State <= Current_State;
 		  end if;
     end process;
 
@@ -41,19 +37,19 @@ begin
     NEXT_STATE_LOGIC : process (Current_State, x) 
     begin 
         case Current_State is 
-            when a =>   if x = '1' then Next_State <= b;
+            when a =>   if x = '0' then Next_State <= b;
                         else Next_State <= c;
                         end if;
-            when b =>   if x = '1' then Next_State <= c;
+            when b =>   if x = '0' then Next_State <= c;
                         else Next_State <= d;
                         end if;
-            when c =>   if x = '1' then Next_State <= b;
+            when c =>   if x = '0' then Next_State <= b;
                         else Next_State <= d;
                         end if;
-            when d =>   if x = '1' then Next_State <= c;
+            when d =>   if x = '0' then Next_State <= c;
                         else Next_State <= a;
                         end if;
-            when others => Next_State <= a;
+            --when others => Next_State <= a;
         end case;
     end process;
 
@@ -64,10 +60,10 @@ begin
             when a =>   if x = '1' then z <= '0';
                         else z <= '1';
                         end if;
-            when b =>   if x = '0' then z <= '1';
+            when b =>   if x = '1' then z <= '1';
                         else z <= '0';
                         end if;
-            when c =>   if x = '0' then z <= '1';
+            when c =>   if x = '1' then z <= '1';
                         else z <= '0';
                         end if;
             when d =>   if x = '1' then z <= '0';
