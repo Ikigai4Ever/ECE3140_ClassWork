@@ -8,47 +8,24 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 
 entity PSNG is 
-    port (in_Clock, enable_bit : in std_logic;
+    port (in_Clock, set_bit : in std_logic;
           out_bits : OUT std_logic_vector(3 downto 0));
 end PSNG;
 
 architecture behavior of PSNG is 
     signal bits : std_logic_vector(3 downto 0) := "1001";
 
-    component xor2
-            port(In1, In2   : IN std_logic;
-                 Out1       : OUT std_logic);
-    end component xor2;
-
 begin 
-    --enable all bits if the enable bit is high
-    ENABLE_ALL : process(enable_bit)
+    --use the Galois LFSRs in order to generate random numbers
+    RAND_GENERATE : process(in_Clock, set_bit)
     begin 
-        if enable_bit = '1' then bits <= "1111";
-        else bits <= bits;
+        if rising_edge(in_Clock) then
+            bits(0) <= bits(1);
+            bits(1) <= bits(0) xor bits(2);
+            bits(2) <= bits(0) xor bits(3);
+            bits(3) <= bits(0);
+        elsif set_bit = '1' then 
+            bits <= "1111";
         end if;
     end process;
-
-    --use the Galois LFSRs in order to generate random numbers
-    RAND_GENERATE : process(in_Clock)
-    begin 
-        U0: xor2 port map (In1 => bits(0), In2 => bits(3), Out1 => bits(2));
-        U1: xor2 port map (In1 => bits(0), In2 => bits(2), Out1 => bits(1));
-    end process;
 end behavior;
-
-
-------------------------------
--- Description of xor2 gate --
-------------------------------
-library IEEE;
-use IEEE.STD_LOGIC_1164.all;
-entity xor2 is  
-    port (In1, In2 : IN std_logic;
-          Out1     : OUT std_logic);
-end xor2;
-
-architecture rtl of xor2 is
-    begin 
-        Out1 <= In1 xor In2;
-end architecture rtl;
