@@ -21,15 +21,20 @@ architecture behavior of PSNG is
     end component xor2;
 
 begin 
-    if enable_bit = '1' then
-        bits <= "1111";
-    else 
-        RAND_GENERATE : process(in_Clock)
-        begin 
-            U0: xor2 port map (In1 => bits(0), In2 => bits(3), Out1 => bits(2));
-            U1: xor2 port map (In1 => bits(0), In2 => bits(2), Out1 => bits(1));
-        end process;
-    end if;
+    --enable all bits if the enable bit is high
+    ENABLE_ALL : process(enable_bit)
+    begin 
+        if enable_bit = '1' then bits <= "1111";
+        else bits <= bits;
+        end if;
+    end process;
+
+    --use the Galois LFSRs in order to generate random numbers
+    RAND_GENERATE : process(in_Clock)
+    begin 
+        U0: xor2 port map (In1 => bits(0), In2 => bits(3), Out1 => bits(2));
+        U1: xor2 port map (In1 => bits(0), In2 => bits(2), Out1 => bits(1));
+    end process;
 end behavior;
 
 
