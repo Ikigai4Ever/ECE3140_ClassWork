@@ -12,23 +12,22 @@ entity hw5p4 is
 end hw5p4;
 
 architecture behavior of hw5p4 is 
+    constant f : std_logic := "1000000";
+
+begin 
     signal LFSR1 : std_logic_vector(3 downto 0) := "1001";
     signal LFSR2 : std_logic_vector(3 downto 0) := "1001";
     signal LFSR3 : std_logic_vector(3 downto 0) := "1001";
     signal LFSR4 : std_logic_vector(3 downto 0) := "1001";
 
-	 component hw5p4_CLK is
-		  port( inclk0 : IN std_logic;
-                c0 : OUT std_logic);
-	 end component;
-	 
-	 
-begin
-    hw5p4_CLK PORT MAP (inclk0 => inCLK, c0 => CLK);
-	
-	 
-	 --use the Galois LFSRs in order to generate random numbers
-    RAND_GENERATE : process(in_Clock, KEY)
+    hw5p4_CLK_inst : hw5p4_CLK PORT MAP (
+		inclk0	 => inCLK,
+		c0	 => CLK;
+	);
+
+begin 
+    --use the Galois LFSRs in order to generate random numbers
+    RAND_GENERATE : process(in_Clock, set_bit)
     begin 
         if rising_edge(in_Clock) then
             --generate random for bit0 of PRNG
@@ -54,7 +53,7 @@ begin
             LFSR4(1) <= LFSR4(2);
             LFSR4(2) <= LFSR4(3);
             LFSR4(3) <= LFSR4(1) xor LFSR4(0);
-        elsif KEY(0) = '1' then 
+        elsif set_bit = '1' then 
             LFSR1 <= "1001";
             LFSR2 <= "1001";
             LFSR3 <= "1001";
@@ -64,4 +63,4 @@ begin
 
     rand_out <= LFSR4(0) & LFSR3(0) & LFSR2(0) & LFSR1(0);
 
-end behavior;
+end behvaior;
