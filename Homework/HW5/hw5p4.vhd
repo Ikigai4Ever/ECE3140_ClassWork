@@ -1,6 +1,9 @@
 --Name: Ty Ahrens 
 --Date: 3/23/2025
---Purpose: 
+--Purpose: PRNG that has an automatic PLL to change a LFSR and a manual mode to 
+--         clock the different cycles to view the different states.
+--ANSWER: The buzzer "rattles" when changing states, which most likely signifies
+--        the different clock cycles 
 
 library IEEE;
 use IEEE.std_logic_1164.all;
@@ -40,29 +43,36 @@ begin
         
         --increment the LFSR every clock cycle
         if rising_edge(manual_Clock) then
-            --generate random for bit0 of PRNG
-            LFSR1(0) <= LFSR1(1);
-            LFSR1(1) <= LFSR1(2);
-            LFSR1(2) <= LFSR1(3);
-            LFSR1(3) <= LFSR1(3) xor LFSR1(2);
+            if KEY(1) = '0' then
+                LFSR1 <= "1001";
+                LFSR2 <= "1001";
+                LFSR3 <= "1001";
+                LFSR4 <= "1001";
+            else
+                --generate random for bit0 of PRNG
+                LFSR1(0) <= LFSR1(1);
+                LFSR1(1) <= LFSR1(2) xor LFSR1(0);
+                LFSR1(2) <= LFSR1(3) xor LFSR1(0);
+                LFSR1(3) <= LFSR1(0);
 
-            --generate random for bit1 of PRNG
-            LFSR2(0) <= LFSR2(1);
-            LFSR2(1) <= LFSR2(2);
-            LFSR2(2) <= LFSR2(3);
-            LFSR2(3) <= LFSR2(3) xor LFSR2(1);
+                --generate random for bit1 of PRNG
+                LFSR2(0) <= LFSR2(1);
+                LFSR2(1) <= LFSR2(2);
+                LFSR2(2) <= LFSR2(3);
+                LFSR2(3) <= LFSR2(3) xor LFSR2(1);
 
-            --generate random for bit2 of PRNG
-            LFSR3(0) <= LFSR3(1);
-            LFSR3(1) <= LFSR3(2);
-            LFSR3(2) <= LFSR3(3);
-            LFSR3(3) <= LFSR3(2) xor LFSR3(0);
+                --generate random for bit2 of PRNG
+                LFSR3(0) <= LFSR3(1);
+                LFSR3(1) <= LFSR3(2);
+                LFSR3(2) <= LFSR3(3);
+                LFSR3(3) <= LFSR3(2) xor LFSR3(0);
 
-            --generate random for bit3 of PRNG
-            LFSR4(0) <= LFSR4(1);
-            LFSR4(1) <= LFSR4(2);
-            LFSR4(2) <= LFSR4(3);
-            LFSR4(3) <= LFSR4(1) xor LFSR4(0);
+                --generate random for bit3 of PRNG
+                LFSR4(0) <= LFSR4(1);
+                LFSR4(1) <= LFSR4(2);
+                LFSR4(2) <= LFSR4(3);
+                LFSR4(3) <= LFSR4(1) xor LFSR4(0);
+			end if;
         end if;
         
     end process;
