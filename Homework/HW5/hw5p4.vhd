@@ -20,43 +20,43 @@ architecture behavior of hw5p4 is
 
     --signal assignments for PLL inClock and Clock
     signal inCLK, CLK : std_logic;
+    signal manual_Clock : std_logic;
 
     --component for PLL CLK
-	 component hw5p4_CLK is
+	component hw5p4_CLK is
 		port(inclk0 : IN std_logic;
              c0 : OUT std_logic);
-	 end component;
+	end component;
 	 
 	 
 begin
-    hw5p4_CLK_inst : hw5p4_CLK PORT MAP (inclk0 => inCLK, c0 => CLK);
+    --hw5p4_CLK_inst : hw5p4_CLK PORT MAP (inclk0 => inCLK, c0 => CLK);
 	
-	 
+	--manCLK <= not KEY(0); 
+
 	--use the Galois LFSRs in order to generate random numbers
     RAND_GENERATE : process(CLK, KEY, SW0)
     begin 
         if SW0 = '1' then
             --check to see if key0 is pressed to act as the clock
-            if KEY(0) = '1' then
+            if KEY(0) = '0' then
                 --generate random for bit0 of PRNG
                 LFSR1(0) <= LFSR1(1);
                 LFSR1(1) <= LFSR1(2);
                 LFSR1(2) <= LFSR1(3);
                 LFSR1(3) <= LFSR1(3) xor LFSR1(2); 
             --if key1 is pressed, then set all for the bits in the LFSR
-            elsif KEY(1) = '1' then 
+            elsif KEY(1) = '0' then 
                 LFSR1 <= "1001";
                 LFSR2 <= "1001";
                 LFSR3 <= "1001";
                 LFSR4 <= "1001";
-            else 
-                LFSR1 <= LFSR1;
             end if;
         
         --run this when the SW0 is toggled off 
         else
             --if key1 is pressed, then set all for the bits in the LFSR
-            if KEY(1) = '1' then 
+            if KEY(1) = '0' then 
                 LFSR1 <= "1001";
                 LFSR2 <= "1001";
                 LFSR3 <= "1001";
@@ -90,6 +90,10 @@ begin
             end if;
         end if;
         
+    end process;
+
+    SEVEN_SEG : process (LFSR1) 
+    begin 
         --case statement to determine and write each hexidecimal number  
         --based on the value of LFSR1
         case LFSR1 is 
@@ -129,7 +133,6 @@ begin
                 sevenSeg <= "1111111";  -- Blank
         END CASE;
     end process;
-
     --send the last bit of LFSR1 to an LED
     feedback_pin <= LFSR1(0);
 
