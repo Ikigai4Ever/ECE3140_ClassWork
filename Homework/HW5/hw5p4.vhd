@@ -51,7 +51,7 @@ begin
             else
                 --generate random for bit0 of PRNG
                 LFSR1(0) <= LFSR1(1);
-                LFSR1(1) <= LFSR1(2) xor LFSR1(0);
+                LFSR1(1) <= LFSR1(2);
                 LFSR1(2) <= LFSR1(3) xor LFSR1(0);
                 LFSR1(3) <= LFSR1(0);
 
