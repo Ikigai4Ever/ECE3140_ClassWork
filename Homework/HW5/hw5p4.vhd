@@ -7,8 +7,8 @@ use IEEE.std_logic_1164.all;
 
 entity hw5p4 is 
     port(KEY    : IN std_logic_vector(1 downto 0);
-         SW0     : IN std_logic;
-			sevenSeg : OUT std_logic_vector(6 downto 0);
+         SW0, inCLK     : IN std_logic;
+	     sevenSeg : OUT std_logic_vector(6 downto 0);
          feedback_pin   : OUT std_logic);
 end hw5p4;
 
@@ -19,7 +19,7 @@ architecture behavior of hw5p4 is
     signal LFSR4 : std_logic_vector(3 downto 0) := "1001";
 
     --signal assignments for PLL inClock and Clock
-    signal inCLK, CLK : std_logic;
+    signal CLK : std_logic;
     signal manual_Clock : std_logic;
 
     --component for PLL CLK
@@ -30,7 +30,7 @@ architecture behavior of hw5p4 is
 	 
 	 
 begin
-    --hw5p4_CLK_inst : hw5p4_CLK PORT MAP (inclk0 => inCLK, c0 => CLK);
+    hw5p4_CLK_inst : hw5p4_CLK PORT MAP (inclk0 => inCLK, c0 => CLK);
 	
 	--manCLK <= not KEY(0); 
 
@@ -39,12 +39,12 @@ begin
     begin 
         if SW0 = '1' then
             --check to see if key0 is pressed to act as the clock
-            if KEY(0) = '0' then
+            if KEY(0) = '1' then
                 --generate random for bit0 of PRNG
                 LFSR1(0) <= LFSR1(1);
                 LFSR1(1) <= LFSR1(2);
                 LFSR1(2) <= LFSR1(3);
-                LFSR1(3) <= LFSR1(3) xor LFSR1(2); 
+                LFSR1(3) <= LFSR1(3) xor LFSR1(1); 
             --if key1 is pressed, then set all for the bits in the LFSR
             elsif KEY(1) = '0' then 
                 LFSR1 <= "1001";
