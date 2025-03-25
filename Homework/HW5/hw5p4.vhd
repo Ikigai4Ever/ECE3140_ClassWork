@@ -7,8 +7,8 @@ use IEEE.std_logic_1164.all;
 
 entity hw5p4 is 
     port(KEY    : IN std_logic_vector(1 downto 0);
-         sevenSeg : IN std_logic_vector(6 downto 0);
          SW0     : IN std_logic;
+			sevenSeg : OUT std_logic_vector(6 downto 0);
          feedback_pin   : OUT std_logic);
 end hw5p4;
 
@@ -22,10 +22,10 @@ architecture behavior of hw5p4 is
     signal inCLK, CLK : std_logic;
 
     --component for PLL CLK
-	component hw5p4_CLK is
+	 component hw5p4_CLK is
 		port(inclk0 : IN std_logic;
              c0 : OUT std_logic);
-	end component;
+	 end component;
 	 
 	 
 begin
