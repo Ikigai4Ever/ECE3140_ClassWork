@@ -29,7 +29,7 @@ architecture behavior of hw5p4 is
 	 
 	 
 begin
-    hw5p4_CLK PORT MAP (inclk0 => inCLK, c0 => CLK);
+    hw5p4_CLK_inst : hw5p4_CLK PORT MAP (inclk0 => inCLK, c0 => CLK);
 	
 	 
 	--use the Galois LFSRs in order to generate random numbers
