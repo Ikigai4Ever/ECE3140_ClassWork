@@ -74,13 +74,14 @@ begin
     U3 : entity work.segDisp_hw6 port map (counter(n-1 downto n-4), hex2);
 
     -- set the clocking due to the change in value of the previous value
-    clk_i(0) <= max10_clk;
-    clk_i(n-1 downto 1) <= q_i(n-2 downto 0);
+    --clk_i(0) <= max10_clk;
+    --clk_i(n-1 downto 1) <= q_i(n-2 downto 0);
 
     -- generate a 12-bit counter 
-    gen_cnter : for i in 0 to n-1 generate
+    --gen_cnter : for i in 0 to n-1 generate
+    
         -- description of the behavior of the counters
-        def_cnter : process(clk_i, reset)
+        def_cnter : process(max10_clk, reset)
         begin
         
     --      if reset = '1' then
@@ -91,9 +92,9 @@ begin
         
 
             if reset = '1' then 
-                counter <= (others => '0');
+                counter <= "000000000000";
             
-            elsif rising_edge(clk_i(i)) then
+            elsif rising_edge(max10_clk) then
                 if data_x < "1000000000" then   -- check to see if the accelerometer is tiliting right
                     counter <= std_logic_vector(unsigned(counter) + (to_integer(unsigned(data_x)) - 512) /10);
                 elsif data_x > "1000000000" then    --check to see if the accelerometer is tilting left
@@ -102,7 +103,7 @@ begin
             end if;
 
         end process def_cnter;
-    end generate;
+    --end generate;
 
     
     -- determine which direction the accelerometer is being tilted to
