@@ -91,14 +91,16 @@ begin
     --      end if;
         
 
-            if reset = '1' then 
+            if reset = '0' then 
                 counter <= "000000000000";
             
             elsif rising_edge(max10_clk) then
                 if data_x < "1000000000" then   -- check to see if the accelerometer is tiliting right
                     counter <= std_logic_vector(unsigned(counter) + (to_integer(unsigned(data_x)) - 512) /10);
+                    --counter <= (counter + (to_integer(unsigned(data_x)) - 512) /10);
                 elsif data_x > "1000000000" then    --check to see if the accelerometer is tilting left
                     counter <= std_logic_vector(unsigned(counter) - (512 - to_integer(unsigned(data_x))) /10);
+                    --counter <= (counter - (512 - to_integer(unsigned(data_x))) /10);
                 end if;
             end if;
 
