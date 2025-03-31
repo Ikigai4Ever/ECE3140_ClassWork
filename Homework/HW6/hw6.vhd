@@ -79,15 +79,15 @@ begin
     -- generate a 12-bit counter 
     gen_cnter : for i in 0 to n-1 generate
         -- description of the behavior of the counters
-        counter_build : process(clk_i, reset)
+        def_cnter : process(clk_i, reset)
         begin
         
-        \    if reset = '1' then
-                q_i(i) <= '1';
-            elsif rising_edge(clk_i(i)) then
-                q_i(i) <= not q_i(i);
-            end if;
-        \
+    --      if reset = '1' then
+    --          q_i(i) <= '1';
+    --      elsif rising_edge(clk_i(i)) then
+    --          q_i(i) <= not q_i(i);
+    --      end if;
+        
 
             if reset = '1' then 
                 counter <= (others => '0');
@@ -100,24 +100,24 @@ begin
                 end if;
             end if;
 
-        end process counter_build;
+        end process def_cnter;
     end generate;
 
-    \
-    --determine which direction the accelerometer is being tilted to
-    adjust_val : process (max10_clk, reset)
-    begin
-        if reset = '1' then 
-            counter <= (others => '0');
-        elsif rising_edge(max10_clk) then
-            if data_x < "1000000000" then
-                counter <= counter + (conv_int(data_x) - 512) /10;
-            elsif data_x > "1000000000" then 
-                counter <= counter - (512 - conv_int(data_x)) /10;
-            end if;
-        end if;
-    end process adjust_val;
-    \
+    
+    -- determine which direction the accelerometer is being tilted to
+--  adjust_val : process (max10_clk, reset)
+--  begin
+--      if reset = '1' then 
+--          counter <= (others => '0');
+--      elsif rising_edge(max10_clk) then
+--          if data_x < "1000000000" then
+--              counter <= counter + (conv_int(data_x) - 512) /10;
+--          elsif data_x > "1000000000" then 
+--              counter <= counter - (512 - conv_int(data_x)) /10;
+--          end if;
+--      end if;
+--  end process adjust_val;
+    
     
     dout <= not q_i; -- output the value of the counter to pins onboard
 end behavior;
