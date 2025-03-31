@@ -7,8 +7,7 @@
 
 library IEEE;
 use IEEE.std_logic_1164.all;
-use IEEE.std_logic_arith.all;
-use IEEE.std_logic_unsigned.all;
+use IEEE.numeric_std.all;
 
 
 --main program that controls what hex_displays are used and the data_x vector
@@ -26,9 +25,9 @@ entity hw6 is
 		GSENSOR_SDO  : INOUT	STD_LOGIC;
 
         -- directions the accelerometer can be tilted  
-        data_x      : BUFFER STD_LOGIC_VECTOR(accelBits downto 0);
-        data_y      : BUFFER STD_LOGIC_VECTOR(accelBits downto 0);
-        data_z      : BUFFER STD_LOGIC_VECTOR(accelBits downto 0);
+        data_x      : BUFFER STD_LOGIC_VECTOR(accelBits-1 downto 0);
+        data_y      : BUFFER STD_LOGIC_VECTOR(accelBits-1 downto 0);
+        data_z      : BUFFER STD_LOGIC_VECTOR(accelBits-1 downto 0);
 
         -- seven segment bits to be sent to 7segDecoder.vhd
         hex0, hex1, hex2 : OUT std_logic_vector(6 downto 0);
@@ -76,7 +75,7 @@ begin
 
     -- set the clocking due to the change in value of the previous value
     clk_i(0) <= max10_clk;
-    clk_i(n-1 downto 1) <= q_i(n-1 downto 0);
+    clk_i(n-1 downto 1) <= q_i(n-2 downto 0);
 
     -- generate a 12-bit counter 
     gen_cnter : for i in 0 to n-1 generate
@@ -96,9 +95,9 @@ begin
             
             elsif rising_edge(clk_i(i)) then
                 if data_x < "1000000000" then   -- check to see if the accelerometer is tiliting right
-                    counter <= counter + (conv_integer(data_x) - 512) /10;
+                    counter <= counter + (to_integer(unsigned(data_x)) - 512) /10;
                 elsif data_x > "1000000000" then    --check to see if the accelerometer is tilting left
-                    counter <= counter - (512 - conv_integer(data_x)) /10;
+                    counter <= counter - (512 - to_integer(unsigned(data_x))) /10;
                 end if;
             end if;
 
