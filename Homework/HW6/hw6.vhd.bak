@@ -13,8 +13,8 @@ use IEEE.std_logic_unsigned.all;
 
 --main program that controls what hex_displays are used and the data_x vector
 entity hw6 is
-    generic(n : integer := 12;
-            accelBits : integer := 10);    -- number of counter bits 
+    generic (n : natural := 12);    -- number of counter bits 
+    generic (accel_bits : natural := 10);
     port(
         -- clock needed for accelerometer to work
         max10_clk : IN std_logic;
@@ -26,9 +26,9 @@ entity hw6 is
 		GSENSOR_SDO  : INOUT	STD_LOGIC;
 
         -- directions the accelerometer can be tilted  
-        data_x      : BUFFER STD_LOGIC_VECTOR(accelBits downto 0);
-        data_y      : BUFFER STD_LOGIC_VECTOR(accelBits downto 0);
-        data_z      : BUFFER STD_LOGIC_VECTOR(accelBits downto 0);
+        data_x      : BUFFER STD_LOGIC_VECTOR(accel_bits downto 0);
+        data_y      : BUFFER STD_LOGIC_VECTOR(accel_bits downto 0);
+        data_z      : BUFFER STD_LOGIC_VECTOR(accel_bits downto 0);
 
         -- seven segment bits to be sent to 7segDecoder.vhd
         hex0, hex1, hex2 : OUT std_logic_vector(6 downto 0);
@@ -54,7 +54,7 @@ architecture behavior of hw6 is
 		SPI_CLK     : OUT STD_LOGIC);
     end component;
 	
-	component segDisp_hw6 is port(
+	component bcd_7segment is port(
 		BCDin : in STD_LOGIC_VECTOR (3 downto 0);
 		Seven_Segment : out STD_LOGIC_VECTOR (6 downto 0));
     end component;
@@ -72,7 +72,7 @@ begin
     -- port map to display x-value onto seven segs 
     U1 : segDisp_hw6 port map (counter(n-9 downto n-12), hex0);
 	U2 : segDisp_hw6 port map (counter(n-5 downto n-8), hex1);
-    U3 : segDisp_hw6 port map (counter(n-1 downto n-4), hex2);
+    U3 : segDisp_hw6 port map (counter(n-1 downto n-4), hex 2);
 
     -- set the clocking due to the change in value of the previous value
     clk_i(0) <= max10_clk;
@@ -96,9 +96,9 @@ begin
             
             elsif rising_edge(clk_i(i)) then
                 if data_x < "1000000000" then   -- check to see if the accelerometer is tiliting right
-                    counter <= counter + (conv_integer(data_x) - 512) /10;
+                    counter <= counter + (conv_int(data_x) - 512) /10;
                 elsif data_x > "1000000000" then    --check to see if the accelerometer is tilting left
-                    counter <= counter - (512 - conv_integer(data_x)) /10;
+                    counter <= counter - (512 - conv_int(data_x)) /10;
                 end if;
             end if;
 
