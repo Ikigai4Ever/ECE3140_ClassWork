@@ -4,7 +4,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity ADXL345_controller is
+entity ADXL345_hw6 is
 
 	port (
 	
@@ -21,9 +21,9 @@ entity ADXL345_controller is
 	
 	);
 	
-end ADXL345_controller;
+end ADXL345_hw6;
 
-architecture ADXL345_controller_structural of ADXL345_controller is
+architecture ADXL345_controller_structural of ADXL345_hw6 is
 
 	component gsensor is port (
 	
