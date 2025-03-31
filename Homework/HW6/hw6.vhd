@@ -67,7 +67,7 @@ architecture behavior of hw6 is
 begin 
 
     --port map for accelerometer 
-    U0 : entity work.ADXL345_hw6 work.port map('1', max10_clk, open, data_x, data_y, data_z, GSENSOR_SDI, GSENSOR_SDO, GSENSOR_CS_N, GSENSOR_SCLK);
+    U0 : entity work.ADXL345_hw6 port map('1', max10_clk, open, data_x, data_y, data_z, GSENSOR_SDI, GSENSOR_SDO, GSENSOR_CS_N, GSENSOR_SCLK);
 
     -- port map to display x-value onto seven segs 
     U1 : entity work.segDisp_hw6 port map (counter(n-9 downto n-12), hex0);
