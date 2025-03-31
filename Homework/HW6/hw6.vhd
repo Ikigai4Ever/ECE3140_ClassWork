@@ -44,9 +44,9 @@ architecture behavior of hw6 is
 		reset_n     : IN STD_LOGIC;
 		clk         : IN STD_LOGIC;
 		data_valid  : OUT STD_LOGIC;
-		data_x      : OUT STD_LOGIC_VECTOR(15 downto 0);
-		data_y      : OUT STD_LOGIC_VECTOR(15 downto 0);
-		data_z      : OUT STD_LOGIC_VECTOR(15 downto 0);
+		data_x      : OUT STD_LOGIC_VECTOR(accelBits-1 downto 0);
+		data_y      : OUT STD_LOGIC_VECTOR(accelBits-1 downto 0);
+		data_z      : OUT STD_LOGIC_VECTOR(accelBits-1 downto 0);
 		SPI_SDI     : OUT STD_LOGIC;
 		SPI_SDO     : IN STD_LOGIC;
 		SPI_CSN     : OUT STD_LOGIC;
@@ -95,9 +95,9 @@ begin
             
             elsif rising_edge(clk_i(i)) then
                 if data_x < "1000000000" then   -- check to see if the accelerometer is tiliting right
-                    counter <= std_logic_vector(counter + (to_integer(unsigned(data_x)) - 512) /10);
+                    counter <= std_logic_vector(unsigned(counter) + (to_integer(unsigned(data_x)) - 512) /10);
                 elsif data_x > "1000000000" then    --check to see if the accelerometer is tilting left
-                    counter <= std_logic_vector(counter - (512 - to_integer(unsigned(data_x))) /10);
+                    counter <= std_logic_vector(unsigned(counter) - (512 - to_integer(unsigned(data_x))) /10);
                 end if;
             end if;
 

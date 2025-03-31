@@ -5,15 +5,15 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity ADXL345_hw6 is
-
+	generic (n : integer := 10);
 	port (
 	
 		reset_n     : IN STD_LOGIC;
 		clk         : IN STD_LOGIC;
 		data_valid  : OUT STD_LOGIC;
-		data_x      : OUT STD_LOGIC_VECTOR(15 downto 0);
-		data_y      : OUT STD_LOGIC_VECTOR(15 downto 0);
-		data_z      : OUT STD_LOGIC_VECTOR(15 downto 0);
+		data_x      : OUT STD_LOGIC_VECTOR(n-1 downto 0);
+		data_y      : OUT STD_LOGIC_VECTOR(n-1 downto 0);
+		data_z      : OUT STD_LOGIC_VECTOR(n-1 downto 0);
 		SPI_SDI     : OUT STD_LOGIC;
 		SPI_SDO     : IN STD_LOGIC;
 		SPI_CSN     : OUT STD_LOGIC;
@@ -30,9 +30,9 @@ architecture ADXL345_controller_structural of ADXL345_hw6 is
 		reset_n     : IN STD_LOGIC;
 		clk         : IN STD_LOGIC;
 		data_valid  : OUT STD_LOGIC;
-		data_x      : OUT STD_LOGIC_VECTOR(15 downto 0);
-		data_y      : OUT STD_LOGIC_VECTOR(15 downto 0);
-		data_z      : OUT STD_LOGIC_VECTOR(15 downto 0);
+		data_x      : OUT STD_LOGIC_VECTOR(n-1 downto 0);
+		data_y      : OUT STD_LOGIC_VECTOR(n-1 downto 0);
+		data_z      : OUT STD_LOGIC_VECTOR(n-1 downto 0);
 		SPI_SDI     : OUT STD_LOGIC;
 		SPI_SDO     : IN STD_LOGIC;
 		SPI_CSN     : OUT STD_LOGIC;
