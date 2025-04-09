@@ -25,40 +25,41 @@ BEGIN
     -- Display Logic
     PROCESS(disp_ena, row, column, SW)
     BEGIN
-        IF(disp_ena = '1') THEN  
-            if SW = "000" then
+        IF(disp_ena = '1') THEN 
+            CASE SW is 
+                when "000" =>
                     red <= (OTHERS => '0');
                     green <= (OTHERS => '0');
                     blue <= (OTHERS => '0');
-            elsif SW = "001" then
+                when "001" =>
                     red <= (OTHERS => '0');
                     green <= (OTHERS => '0');
                     blue <= (OTHERS => '1');
-            elsif SW = "010" then
+                when "010" =>
                     red <= (OTHERS => '0');
                     green <= (OTHERS => '1');
                     blue <= (OTHERS => '0');
-            elsif SW = "011" then
+                when "011" =>
                     red <= (OTHERS => '0');
                     green <= (OTHERS => '1');
                     blue <= (OTHERS => '1');
-            elsif SW = "100" then
+                when "100" =>
                     red <= (OTHERS => '1');
                     green <= (OTHERS => '0');
                     blue <= (OTHERS => '0');
-            elsif SW = "101" then
+                when "101" =>
                     red <= (OTHERS => '1');
                     green <= (OTHERS => '0');
                     blue <= (OTHERS => '1');
-            elsif SW = "110" then 
+                when "110" => 
                     red <= (OTHERS => '1');
                     green <= (OTHERS => '1');
                     blue <= (OTHERS => '0');
-            elsif SW = "111" then
+                when "111" =>
                     red <= (OTHERS => '1');
                     green <= (OTHERS => '1');
                     blue <= (OTHERS => '1');
-            END IF;
+            END CASE;
         ELSE 
             red <= (OTHERS => '0');
             green <= (OTHERS => '0');
