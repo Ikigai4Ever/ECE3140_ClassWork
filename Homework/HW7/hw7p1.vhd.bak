@@ -27,11 +27,22 @@
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
-USE ieee.numeric_std.all;
 
 ENTITY hw7p1 IS
+  GENERIC(
+	col_a : INTEGER := 80;
+	col_b : INTEGER := 160;
+	col_c : INTEGER := 240;
+	col_d : INTEGER := 320;
+	col_e : INTEGER := 400;
+	col_f : INTEGER := 480;
+	col_g : INTEGER := 560;
+	col_h : INTEGER := 640;
+    cnt_bits : INTEGER := 12;  -- number of bits for counter
+
+	);  
   PORT(
-    max10_clk:  IN   STD_LOGIC;  --50 MHz clock from the DE10-Lite board
+    max10_clk:  IN   STD_LOGIC;  -- clock input
     disp_ena :  IN   STD_LOGIC;  --display enable ('1' = display time, '0' = blanking time)
     row      :  IN   INTEGER;    --row pixel coordinate
     column   :  IN   INTEGER;    --column pixel coordinate
@@ -40,48 +51,33 @@ ENTITY hw7p1 IS
     blue     :  OUT  STD_LOGIC_VECTOR(3 DOWNTO 0) := (OTHERS => '0')); --blue magnitude output to DAC
 END hw7p1;
 
-
 ARCHITECTURE behavior OF hw7p1 IS
-    constant chunk_width : integer := 7;
-    constant chunk_height : integer := 7;    
 BEGIN
+    signal counter : std_logic_vector(cnt_bits-1 downto 0) := (others => '0'); -- counter signal
+  PROCESS(disp_ena, row, column)
+  BEGIN
 
+    IF(disp_ena = '1') THEN        --display time
+        red <= (counter(cnt_bits-1 downto cnt_bits-4));
+        green <= (counter(cnt_bits-5 downto cnt_bits-8));
+        blue <= (counter(cnt_bits-9 downto cnt_bits-12));
+	ELSE 
+		red <= (OTHERS => '0');
+		green <= (OTHERS => '0');
+		blue <= (OTHERS => '0');
+	
+    END IF;
+    ELSE                           --blanking time
+      red <= (OTHERS => '0');
+      green <= (OTHERS => '0');
+      blue <= (OTHERS => '0');
+    END IF;
 
-  -- Display Logic
-    PROCESS(disp_ena, row, column)
-        variable chunk_col : integer;
-        variable chunk_row : integer;
-        variable color : integer;
-        variable r4, g4, b4 : integer;
-    BEGIN
-        IF(disp_ena = '1') THEN        --display time
-            chunk_col := column / chunk_width;
-            chunk_row := row / chunk_height;
-            color := chunk_col + (chunk_row * 64); 
+    if rising_edge(max10_clk) then
+        counter <= counter + '1';
+        counter <= std_logic_vector(unsigned(counter));
+    end if;
 
-            IF color < 4096 THEN
-                r4 := (color / 256) mod 16; -- 4 bits for red
-                g4 := (color / 16) mod 16;  -- 4 bits for green
-                b4 := color mod 16;         -- 4 bits for blue
-
-                red <= std_logic_vector(to_unsigned(r4, 4));
-                green <= std_logic_vector(to_unsigned(g4, 4));
-                blue <= std_logic_vector(to_unsigned(b4, 4));
-            ELSE
-                red <= (OTHERS => '0');
-                green <= (OTHERS => '0');
-                blue <= (OTHERS => '0');
-            END IF;    
-        ELSE                           --blanking time
-            red <= (OTHERS => '0');
-            green <= (OTHERS => '0');
-            blue <= (OTHERS => '0');
-        END IF;
-
-END PROCESS;
-
+    
+  END PROCESS;
 END behavior;
-
-
-
-
