@@ -30,7 +30,9 @@ entity vga_top is
 		
 		red_m      :  OUT  STD_LOGIC_VECTOR(color DOWNTO 0) := (OTHERS => '0');  --red magnitude output to DAC
 		green_m    :  OUT  STD_LOGIC_VECTOR(color DOWNTO 0) := (OTHERS => '0');  --green magnitude output to DAC
-		blue_m     :  OUT  STD_LOGIC_VECTOR(color DOWNTO 0) := (OTHERS => '0') --blue magnitude output to DAC
+		blue_m     :  OUT  STD_LOGIC_VECTOR(color DOWNTO 0) := (OTHERS => '0'); --blue magnitude output to DAC
+
+		switches_m : IN  STD_LOGIC_VECTOR(2 downto 0) := (others => '0') -- switches for color selection
 	
 	);
 	
@@ -67,7 +69,7 @@ architecture vga_structural of vga_top is
 		
 	end component;
 	
-	component hw7p1 is
+	component hw7p2 is
 	
 		port(
 			
@@ -77,7 +79,8 @@ architecture vga_structural of vga_top is
 			column   :  IN  INTEGER;    --column pixel coordinate
 			red      :  OUT STD_LOGIC_VECTOR(color DOWNTO 0) := (OTHERS => '0');  --red magnitude output to DAC
 			green    :  OUT STD_LOGIC_VECTOR(color DOWNTO 0) := (OTHERS => '0');  --green magnitude output to DAC
-			blue     :  OUT STD_LOGIC_VECTOR(color DOWNTO 0) := (OTHERS => '0')   --blue magnitude output to DAC
+			blue     :  OUT STD_LOGIC_VECTOR(color DOWNTO 0) := (OTHERS => '0');   --blue magnitude output to DAC
+			SW       :  IN  STD_LOGIC_VECTOR(2 downto 0) 	 := (others => '0')
 		
 		);
 		
@@ -92,6 +95,7 @@ begin
 -- Just need 3 components for VGA system 
 	U1	:	vga_pll_25_175 port map(pixel_clk_m, pll_OUT_to_vga_controller_IN);
 	U2	:	vga_controller port map(pll_OUT_to_vga_controller_IN, reset_n_m, h_sync_m, v_sync_m, dispEn, colSignal, rowSignal, open, open);
-	U3	:	hw7p1 port map(pixel_clk_m,dispEn, rowSignal, colSignal, red_m, green_m, blue_m);
+	--U3	:	hw7p1 port map(pixel_clk_m,dispEn, rowSignal, colSignal, red_m, green_m, blue_m);
+	U4	:	hw7p2 port map(pixel_clk_m,dispEn, rowSignal, colSignal, red_m, green_m, blue_m, switches_m);
 
 end vga_structural;
