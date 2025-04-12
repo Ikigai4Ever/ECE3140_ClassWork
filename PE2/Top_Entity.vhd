@@ -12,27 +12,27 @@ use IEEE.NUMERIC_STD.ALL;
 entity test is
     Port (
         -- Clocks and control
-        CLK        : in  STD_LOGIC;
-        KEY0       : in  STD_LOGIC; -- active-low reset/control
-		  KEY1 		 : in  STD_LOGIC;
+        CLK         : in  STD_LOGIC;
+        KEY0        : in  STD_LOGIC; -- active-low reset/control
+		KEY1 	    : in  STD_LOGIC;
 		  
-        ChA        : in  STD_LOGIC; -- CLK on RE
-        ChB        : in  STD_LOGIC; -- DT on RE
+        ChA         : in  STD_LOGIC; -- CLK on RE
+        ChB         : in  STD_LOGIC; -- DT on RE
 
         -- 7-Segment Display
-        HEX0       : out STD_LOGIC_VECTOR(6 downto 0);
-        HEX1       : out STD_LOGIC_VECTOR(6 downto 0);
-        HEX2       : out STD_LOGIC_VECTOR(6 downto 0);
-        HEX3       : out STD_LOGIC_VECTOR(6 downto 0);
-        HEX4       : out STD_LOGIC_VECTOR(6 downto 0);
-        HEX5       : out STD_LOGIC_VECTOR(6 downto 0);
+        HEX0        : out STD_LOGIC_VECTOR(6 downto 0);
+        HEX1        : out STD_LOGIC_VECTOR(6 downto 0);
+        HEX2        : out STD_LOGIC_VECTOR(6 downto 0);
+        HEX3        : out STD_LOGIC_VECTOR(6 downto 0);
+        HEX4        : out STD_LOGIC_VECTOR(6 downto 0);
+        HEX5        : out STD_LOGIC_VECTOR(6 downto 0);
 
         -- VGA Outputs
-        h_sync_m   : out STD_LOGIC;
-        v_sync_m   : out STD_LOGIC;
-        red_m      : out STD_LOGIC_VECTOR(7 downto 0);
-        green_m    : out STD_LOGIC_VECTOR(7 downto 0);
-        blue_m     : out STD_LOGIC_VECTOR(7 downto 0)
+        h_sync_m    : out STD_LOGIC;
+        v_sync_m    : out STD_LOGIC;
+        red_m       : out STD_LOGIC_VECTOR(7 downto 0);
+        green_m     : out STD_LOGIC_VECTOR(7 downto 0);
+        blue_m      : out STD_LOGIC_VECTOR(7 downto 0)
     );
 end test;
 
@@ -58,9 +58,11 @@ architecture Behavioral of test is
     signal colSignal   : integer;
 
     -- Paddle Position from Rotary Encoder
-    signal RE_Val      : integer := 0;
-	 signal prevA		  : STD_LOGIC := '0';
-	 signal prevB       : STD_LOGIC := '0';
+    signal RE_Val       : integer := 0;
+	signal prevA	    : STD_LOGIC := '0';
+	signal prevB        : STD_LOGIC := '0';
+    signal ChA_clean    : STD_LOGIC := '0';
+    signal ChB_clean    : STD_LOGIC := '0';
 	 
     constant DEBOUNCE_DELAY : integer := 5; -- Reduced debounce delay for responsiveness
     signal debounce_counter : integer := 0;
@@ -202,78 +204,8 @@ begin
             end if;
         end if;
     end process;
-	 
-	 		--	if (ChA = '1' and ChB = '0') and RE_Val < paddle_movr then 
-		--		RE_Val <= RE_Val + (1/4);
-		--	elsif (ChB = '1' and ChA = '0') and RE_Val > paddle_movl then
-		--		RE_Val <= RE_Val - (1/4);
-		--	else 
-		--		RE_Val <= RE_Val;
-		--	end if;
 
---process(ChA, KEY1)
---		begin
---		if KEY1 = '0' then
---			RE_Val <= 0;
---		else
---			if rising_edge(ChA) then
---			if rising_edge(ChA) then
---				if (rising_edge(ChA) and ChB = '0') and RE_Val < paddle_movr then 
---					RE_Val <= RE_Val + 2;
-				--else
-					--RE_Val <= RE_Val;
---				elsif (rising_edge(ChA) and ChB = '1') and RE_Val > paddle_movl then 
---					RE_Val <= RE_Val - 2;
-				--else
-					--RE_Val <= RE_Val;
---				end if;
---			end if;
---			end if;
---		end if;
---	end process;
-
---process(pll_out_clk, ChA)
- --   begin
---			if rising_edge(ChA) then 
- --           if KEY1 = '0' then
- --              RE_Val <= 0;
---            else
-                -- detect change in encoder A
---						 if ChA /= prevA then
---							prevA <= ChA;
---							prevB <= ChB;
---							if (ChA = prevB) and (RE_Val < paddle_movr) then 
---								RE_Val <= RE_Val + 1;
---							elsif (ChB = prevA) and (RE_Val > paddle_movl) then
---								RE_Val <= RE_Val - 1;
---							else 
---								RE_Val <= RE_Val;
---							end if;
---						 else 
---							prevA <= prevA;
---							prevB <= prevB;
---						
---						 end if;
---				end if;
---			end if;
---    end process;
-
---process(ChA)
-	--begin
---	 if rising_edge(ChA) then
---		if KEY1 = '0' then
---         RE_Val <= 0;
- --     else
---			if (ChB = '1') and RE_Val < paddle_movr then
---				RE_Val <= RE_Val + 1;
---			elsif (ChB = '0') and RE_Val > paddle_movl then
---				RE_Val <= RE_Val - 1;
-			--else 
-				--RE_Val <= RE_Val;
---			end if;
---		end if;
---	end if;
---end process;
+    
 
 --Rotary encoder process with debouncing, rate limiting, and clamping
 --Rotary encoder process with optimized debouncing and rate limiting
@@ -282,45 +214,26 @@ begin
     if rising_edge(CLK) then
         if KEY1 = '0' then
             RE_Val <= 0;
+            prevA <= '0';
         else
-            -- Debouncing logic
-            if debounce_counter < DEBOUNCE_DELAY then
-                debounce_counter <= debounce_counter + 1;
-            else
-                debounce_counter <= 0;
-
-                -- Rate limiting logic
-                if rate_limit_counter < RATE_LIMIT then
-                    rate_limit_counter <= rate_limit_counter + 1;
-                else
-                    rate_limit_counter <= 0;
-
-                    -- Clockwise rotation detection
-                    if (ChA = '1' and ChB = '0' and prevA = '0' and prevB = '0') or
-                       (ChA = '1' and ChB = '1' and prevA = '1' and prevB = '0') or
-                       (ChA = '0' and ChB = '1' and prevA = '1' and prevB = '1') or
-                       (ChA = '0' and ChB = '0' and prevA = '0' and prevB = '1') then
-                        if (RE_Val < paddle_movr) then
-                            RE_Val <= RE_Val + 1;
-                        end if;
-                    -- Counter-clockwise rotation detection
-                    elsif (ChA = '0' and ChB = '0' and prevA = '1' and prevB = '0') or
-                          (ChA = '0' and ChB = '1' and prevA = '0' and prevB = '0') or
-                          (ChA = '1' and ChB = '1' and prevA = '0' and prevB = '1') or
-                          (ChA = '1' and ChB = '0' and prevA = '1' and prevB = '1') then
-                        if (RE_Val > paddle_movl) then
-                            RE_Val <= RE_Val - 1;
-                        end if;
+            -- Detect rising edge on ChA
+            if (prevA = '0') and (ChA_clean = '1') then
+                -- Determine direction using ChB
+                if ChB_clean = '0' then  -- Clockwise
+                    if RE_Val < paddle_movr then
+                        RE_Val <= RE_Val + 4;  -- Adjust movement speed
+                    end if;
+                else  -- Counter-clockwise
+                    if RE_Val > paddle_movl then
+                        RE_Val <= RE_Val - 4;
                     end if;
                 end if;
             end if;
-
-            -- Always update previous values
-            prevA <= ChA;
-            prevB <= ChB;
+            prevA <= ChA_clean;
         end if;
     end if;
 end process;
+
 
     -- Fibonacci Display
     process(fib0)
@@ -328,9 +241,26 @@ end process;
         display_number(fib0, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
     end process;
 
+
+
+    
     -- VGA Signal Routing
     U1: vga_pll_25_175 port map(CLK, pll_out_clk);
     U2: vga_controller port map(pll_out_clk, '1', h_sync_m, v_sync_m, dispEn, colSignal, rowSignal, open, open);
     U3: hw_image_generator port map(dispEn, rowSignal, colSignal, RE_Val, red_m, green_m, blue_m);
+    
+    -- Debouncers for the rortary encoder signals
+    debounce_ChA: entity work.Debounce
+        port map (
+            clk   => CLK,
+            noisy => ChA,
+            clean => ChA_clean
+        );
 
+    debounce_ChB: entity work.Debounce
+        port map (
+            clk   => CLK,
+            noisy => ChB,
+            clean => ChB_clean
+        );
 end Behavioral;  
