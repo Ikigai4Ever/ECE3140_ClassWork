@@ -25,7 +25,7 @@ ARCHITECTURE behavior OF hw7p3 IS
 BEGIN 
     DISPLAY : PROCESS(clk)
     BEGIN
-        IF rising_edge(clk) THEN
+        IF risng_edge(clk) THEN
             IF KEY = '1' THEN 
                 shift_red_left <= '0';
                 shift_red_right <= '0'; 
@@ -48,17 +48,16 @@ BEGIN
                 end if;
                 
                 -- y-intercept logic check of accelerometer data
-                if (y_pos = 0) THEN 
+                if (y_int = 0) THEN 
                     shift_green_left <= '0';
                     shift_green_right <= '0';
-                elsif (y_pos < 0) THEN
+                elsif (y_int < 0) THEN
                     shift_green_left <= '1';
                     shift_green_right <= '0';
                 else 
                     shift_green_left <= '0';
                     shift_green_right <= '1';
                 end if;
-				 END IF;
         END IF;
     END PROCESS;
 end behavior;

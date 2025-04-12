@@ -32,8 +32,8 @@ entity vga_top is
 		green_m    :  OUT  STD_LOGIC_VECTOR(color DOWNTO 0) := (OTHERS => '0');  --green magnitude output to DAC
 		blue_m     :  OUT  STD_LOGIC_VECTOR(color DOWNTO 0) := (OTHERS => '0'); --blue magnitude output to DAC
 
-		switches_m : IN  STD_LOGIC_VECTOR(2 downto 0) := (others => '0') -- switches for color selection
-		key_m : IN  STD_LOGIC; -- push button to reset the bar positions
+		switches_m : IN  STD_LOGIC_VECTOR(2 downto 0) := (others => '0'); -- switches for color selection
+		key_m : IN  STD_LOGIC -- push button to reset the bar positions
 	);
 	
 end vga_top;
@@ -73,15 +73,18 @@ architecture vga_structural of vga_top is
 	
 		port(
 			
-			max10_clk:  IN  STD_LOGIC;  -- clock input
-			disp_ena :  IN  STD_LOGIC;  --display enable ('1' = display time, '0' = blanking time)
-			row      :  IN  INTEGER;    --row pixel coordinate
-			column   :  IN  INTEGER;    --column pixel coordinate
-			red      :  OUT STD_LOGIC_VECTOR(color DOWNTO 0) := (OTHERS => '0');  --red magnitude output to DAC
-			green    :  OUT STD_LOGIC_VECTOR(color DOWNTO 0) := (OTHERS => '0');  --green magnitude output to DAC
-			blue     :  OUT STD_LOGIC_VECTOR(color DOWNTO 0) := (OTHERS => '0');   --blue magnitude output to DAC
-			SW 		 :  IN  STD_LOGIC_VECTOR(2 downto 0)     := (others => '0') -- switches for color selection
-		
+			max10_clk:  IN   STD_LOGIC;  --50 MHz clock from the DE10-Lite board
+			disp_ena :  IN   STD_LOGIC;  --display enable ('1' = display time, '0' = blanking time)
+			row      :  IN   INTEGER;    --row pixel coordinate
+			column   :  IN   INTEGER;    --column pixel coordinate
+			KEY      :  IN   STD_LOGIC; --push button to reset the bar positions
+			red      :  OUT  STD_LOGIC_VECTOR(3 DOWNTO 0) := (OTHERS => '0');  --red magnitude output to DAC
+			green    :  OUT  STD_LOGIC_VECTOR(3 DOWNTO 0) := (OTHERS => '0');  --green magnitude output to DAC
+			blue     :  OUT  STD_LOGIC_VECTOR(3 DOWNTO 0) := (OTHERS => '0');   --blue magnitude output to DAC
+			shift_red_left    : out std_logic;
+			shift_red_right   : out std_logic;
+			shift_green_left  : out std_logic;
+			shift_green_right : out std_logic
 		);
 		
 	end component;
@@ -132,7 +135,8 @@ begin
 	U1	:	vga_pll_25_175 port map(pixel_clk_m, pll_OUT_to_vga_controller_IN);
 	U2	:	vga_controller port map(pll_OUT_to_vga_controller_IN, reset_n_m, h_sync_m, v_sync_m, dispEn, colSignal, rowSignal, open, open);
 	--U3	:	hw7p1 port map(pixel_clk_m,dispEn, rowSignal, colSignal, red_m, green_m, blue_m);
-	U4	:	hw7p2 port map(pixel_clk_m,dispEn, rowSignal, colSignal, red_m, green_m, blue_m, switches_m);
-	U5  : 	hw7p3 port map(clk, data_x, data_x, key_m, shift_red_left, shift_red_right, shift_green_left, shift_green_right);
+	U4	:	hw7p2 port map(pixel_clk_m,dispEn, rowSignal, colSignal, red_m, green_m, blue_m, key_m, shift_red_left, shift_red_right, shift_green_left, shift_green_right);
+	U5  : 	accelerometer port map(key_m, pixel_clk_m, open, data_x, data_y, open, open, open, open);
+	U6  : 	hw7p3 port map(clk, data_x, data_x, key_m, shift_red_left, shift_red_right, shift_green_left, shift_green_right);
 
 end vga_structural;

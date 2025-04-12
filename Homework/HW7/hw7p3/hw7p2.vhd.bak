@@ -22,10 +22,10 @@ ENTITY hw7p2 IS
     red      :  OUT  STD_LOGIC_VECTOR(3 DOWNTO 0) := (OTHERS => '0');  --red magnitude output to DAC
     green    :  OUT  STD_LOGIC_VECTOR(3 DOWNTO 0) := (OTHERS => '0');  --green magnitude output to DAC
     blue     :  OUT  STD_LOGIC_VECTOR(3 DOWNTO 0) := (OTHERS => '0');   --blue magnitude output to DAC
-    shift_red_left    : OUT std_logic;
-    shift_red_right   : OUT std_logic;
-    shift_green_left  : OUT std_logic;
-    shift_green_right : OUT std_logic
+    shift_red_left    : out std_logic;
+    shift_red_right   : out std_logic;
+    shift_green_left  : out std_logic;
+    shift_green_right : out std_logic
     ); 
 END hw7p2;
 
@@ -40,8 +40,8 @@ BEGIN
         IF(disp_ena = '1') THEN 
             -- Check if the key is pressed to reset the bar positions
             IF (KEY = '1') THEN 
-                x_pos <= to_signed(column_default, 16);
-                y_pos <= to_signed(row_default, 16);
+                x_pos <= column_default;
+                y_pos <= row_default;
 
             ELSE
                 -- Red Bar Logic
@@ -54,7 +54,6 @@ BEGIN
                 ELSIF shift_red_left = '1' THEN
                     IF (column >= x_pos - bar_width AND column <= column_default) THEN
                         red <= (OTHERS => '1');
-					END IF;
                 ELSIF shift_red_right = '1' THEN
                     IF (column >= x_pos AND column <= column_default + x_pos) THEN
                         red <= (OTHERS => '1');
@@ -74,7 +73,6 @@ BEGIN
                 ELSIF shift_green_left = '1' THEN
                     IF (column >= y_pos - bar_width AND column <= column_default) THEN
                         green <= (OTHERS => '1');
-					END IF;
                 ELSIF shift_green_right = '1' THEN
                     IF (column >= y_pos AND column <= column_default + y_pos) THEN
                         green <= (OTHERS => '1');
