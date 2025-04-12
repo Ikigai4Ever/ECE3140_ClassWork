@@ -38,8 +38,8 @@ end test;
 
 architecture Behavioral of test is
 
-    constant paddle_movl  : integer := -270;
-    constant paddle_movr  : integer := 270;
+    constant paddle_movl  : integer := 40;
+    constant paddle_movr  : integer := 600;
 
     -- Fibonacci Signals
     signal fib0, fib1 : unsigned(31 downto 0) := (others => '0');
@@ -59,7 +59,7 @@ architecture Behavioral of test is
     signal colSignal   : integer;
 
     -- Paddle Position from Rotary Encoder
-    signal RE_Val       : integer := 0;
+    signal RE_Val       : integer := 320;
 	signal prevA	    : STD_LOGIC := '0';
 	signal prevB        : STD_LOGIC := '0';
     signal ChA_clean    : STD_LOGIC := '0';

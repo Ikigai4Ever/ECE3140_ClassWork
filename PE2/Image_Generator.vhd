@@ -17,10 +17,12 @@ end hw_image_generator;
 
 architecture behavior of hw_image_generator is
 
-    constant block_width   : integer := 40;
-    constant block_height  : integer := 15;
-    constant block_width_spacing : integer := 5;
-    constant block_height_spacing : integer := 4; 
+    constant block_start_x : integer := 25;
+    constant block_start_y : integer := 60;
+    constant block_width   : integer := 35;
+    constant block_height  : integer := 10;
+    constant block_width_spacing : integer := 8;
+    constant block_height_spacing : integer := 5; 
 
 
 	constant paddle_top     : integer := 450;
@@ -30,15 +32,23 @@ architecture behavior of hw_image_generator is
 	constant paddle_width   : integer := 60;
 
     constant BORDER_TOP   : integer := 10;
-    constant BORDER_LEFT  : integer := 9;
-    constant BORDER_RIGHT : integer := 629;
+    constant BORDER_LEFT  : integer := 10;
+    constant BORDER_RIGHT : integer := 630;
 
-    constant row1_top    : integer := block_height;
+    constant row1_top    : integer := block_start_y;
     constant row1_bottom : integer := row1_top + block_height;
     constant row2_top    : integer := row1_bottom + block_height_spacing;
     constant row2_bottom : integer := row2_top + block_height;
 
-    constant column1_left   : integer := 13;
+    -- Row array constants for FOR loop
+    constant row_tops : array(1 to 2) of integer := (
+        row1_top, row2_top
+    );
+    constant row_bottoms : array(1 to 2) of integer := (
+        row1_bottom, row2_bottom
+    );
+
+    constant column1_left   : integer := block_start_x;
     constant column1_right  : integer := column1_left + block_width;
     constant column2_left   : integer := column1_right + block_width_spacing;
     constant column2_right  : integer := column2_left + block_width;
@@ -66,96 +76,56 @@ architecture behavior of hw_image_generator is
     constant column13_right : integer := column13_left + block_width;
     constant column14_left  : integer := column13_right + block_width_spacing;
     constant column14_right : integer := column14_left + block_width;
+
+    -- Column arrary constants for FOR loop
+    constant column_lefts : array(1 to 14) of integer := (
+        column1_left, column2_left, column3_left, column4_left,
+        column5_left, column6_left, column7_left, column8_left,
+        column9_left, column10_left, column11_left, column12_left,
+        column13_left, column14_left
+    );
+    constant column_rights : array(1 to 14) of integer := (
+        column1_right, column2_right, column3_right, column4_right,
+        column5_right, column6_right, column7_right, column8_right,
+        column9_right, column10_right, column11_right, column12_right,
+        column13_right, column14_right
+    );
 	 
 
-begin
-
+begin	 	 
     process(disp_ena, row, column, RE_Val)
         variable paddle_posL : integer;
         variable paddle_posR : integer;
     begin
-        paddle_posL := (paddle_Left + RE_Val);
-		paddle_posR := (paddle_posL + paddle_width);
-			
-			
-		if row >= paddle_top and row <= paddle_bottom and column >= paddle_posL and column <= paddle_posR then
-           red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
+        -- Default black background
+        red   <= X"00";
+        green <= X"00";
+        blue  <= X"00";
+
+        -- Paddle position based on RE_Val
+        paddle_posL := RE_Val - paddle_width / 2;
+        paddle_posR := RE_Val + paddle_width / 2;
+
+        -- Paddle coloring
+        if row >= paddle_top and row <= paddle_bottom and column >= paddle_posL and column <= paddle_posR then
+            red   <= X"FF";
+            green <= X"FF";
+            blue  <= X"FF";  -- Bright white
 		end if;
 
-    end process;
-	 	 
-    process(disp_ena, row, column, RE_Val)
-		variable paddle_posL : integer;
-		variable paddle_posR : integer;
-    begin
-        -- Default black background
-        red   <= (others => '0');
-        green <= (others => '0');
-        blue  <= (others => '0');
+        -- Loop over rows and columns
+        for row_idx in 1 to 8 loop
+            for col_idx in 1 to 14 loop
+                if row >= row_tops(row_idx) and row <= row_bottoms(row_idx) and
+                column >= column_lefts(col_idx) and column <= column_rights(col_idx) then
+                
+                red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
+                end if;
+            end loop;
+        end loop;
 
- 
-        -- First row blocks
-        if row >= row1_top and row <= row1_bottom and column >= column1_left and column <= column1_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row1_top and row <= row1_bottom and column >= column2_left and column <= column2_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row1_top and row <= row1_bottom and column >= column3_left and column <= column3_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row1_top and row <= row1_bottom and column >= column4_left and column <= column4_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row1_top and row <= row1_bottom and column >= column5_left and column <= column5_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row1_top and row <= row1_bottom and column >= column6_left and column <= column6_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row1_top and row <= row1_bottom and column >= column7_left and column <= column7_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row1_top and row <= row1_bottom and column >= column8_left and column <= column8_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row1_top and row <= row1_bottom and column >= column9_left and column <= column9_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row1_top and row <= row1_bottom and column >= column10_left and column <= column10_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row1_top and row <= row1_bottom and column >= column11_left and column <= column11_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row1_top and row <= row1_bottom and column >= column12_left and column <= column12_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row1_top and row <= row1_bottom and column >= column13_left and column <= column13_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row1_top and row <= row1_bottom and column >= column14_left and column <= column14_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
 
-        -- Second row blocks
-        elsif row >= row2_top and row <= row2_bottom and column >= column1_left and column <= column1_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row2_top and row <= row2_bottom and column >= column2_left and column <= column2_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row2_top and row <= row2_bottom and column >= column3_left and column <= column3_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row2_top and row <= row2_bottom and column >= column4_left and column <= column4_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row2_top and row <= row2_bottom and column >= column5_left and column <= column5_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row2_top and row <= row2_bottom and column >= column6_left and column <= column6_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row2_top and row <= row2_bottom and column >= column7_left and column <= column7_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row2_top and row <= row2_bottom and column >= column8_left and column <= column8_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row2_top and row <= row2_bottom and column >= column9_left and column <= column9_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row2_top and row <= row2_bottom and column >= column10_left and column <= column10_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row2_top and row <= row2_bottom and column >= column11_left and column <= column11_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row2_top and row <= row2_bottom and column >= column12_left and column <= column12_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row2_top and row <= row2_bottom and column >= column13_left and column <= column13_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        elsif row >= row2_top and row <= row2_bottom and column >= column14_left and column <= column14_right then
-            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-        end if;
 
-        
 		      -- Border coloring
         if column <= BORDER_LEFT or column >= BORDER_RIGHT then
             red   <= X"EF";
