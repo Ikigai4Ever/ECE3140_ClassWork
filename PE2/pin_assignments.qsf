@@ -1,3 +1,36 @@
+# DE10 50MH Clock
+set_location_assignment PIN_P11 -to CLK
+
+# Rotary Encoder
+set_location_assignment PIN_AB17 -to ChA
+set_location_assignment PIN_AA17 -to ChB
+
+# Red VGA 
+set_location_assignment PIN_AA1 -to red_m[0]
+set_location_assignment PIN_V1 -to red_m[1]
+set_location_assignment PIN_Y2 -to red_m[2]
+set_location_assignment PIN_Y1 -to red_m[3]
+
+# Green VGA
+set_location_assignment PIN_W1 -to green_m[0]
+set_location_assignment PIN_T2 -to green_m[1]
+set_location_assignment PIN_R2 -to green_m[2]
+set_location_assignment PIN_R1 -to green_m[3]
+
+# Blue VGA
+set_location_assignment PIN_P1 -to blue_m[0]
+set_location_assignment PIN_T1 -to blue_m[1]
+set_location_assignment PIN_P4 -to blue_m[2]
+set_location_assignment PIN_N2 -to blue_m[3]
+
+# VGA Location
+set_location_assignment PIN_N3 -to h_sync_m
+set_location_assignment PIN_N1 -to v_sync_m
+
+# KEYS
+set_location_assignment PIN_B8 -to KEY0
+set_location_assignment PIN_A7 -to KEY1
+
 # HEX0
 set_location_assignment PIN_C14 -to HEX0[0]
 set_location_assignment PIN_E15 -to HEX0[1]
