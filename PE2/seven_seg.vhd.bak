@@ -19,7 +19,7 @@ architecture behavioral of bin2seg7_decoder is
 
 begin 
 
-		process (fib_number)
+		process (inData)
 		begin
             --sevenSeg 0 to 9
             case fib_number is 

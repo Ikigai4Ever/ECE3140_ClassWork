@@ -72,35 +72,13 @@ architecture Behavioral of test is
     constant RATE_LIMIT : integer := 1; -- Reduced rate limit for smoother operation
 	 
 
-
-
-    -- 7-segment decoder
-    function to_7seg(d : integer) return std_logic_vector is
-        variable seg : std_logic_vector(6 downto 0);
-    begin
-        case d is
-            when 0 => seg := "1000000";
-            when 1 => seg := "1111001";
-            when 2 => seg := "0100100";
-            when 3 => seg := "0110000";
-            when 4 => seg := "0011001";
-            when 5 => seg := "0010010";
-            when 6 => seg := "0000010";
-            when 7 => seg := "1111000";
-            when 8 => seg := "0000000";
-            when 9 => seg := "0010000";
-            when others => seg := "1111111";
-        end case;
-        return seg;
-    end function;
-
     -- 7-seg decoder
     component bin2seg7_decoder is
         port(
             fib_number : IN integer; -- 4-bit binary input
             HEX : OUT std_logic_vector(6 downto 0)    -- seven segment output   
             );
-    end bin2seg7_decoder;
+    end component;
 
     -- VGA Components
     component vga_pll_25_175
@@ -251,38 +229,38 @@ end process;
     -- Decoders for fibonacci numbers to seven segments
     decoder0: bin2seg7_decoder
         port map(
-            fib_number => d0,
-            HEX => HEX0;
+            fib_number => digit0,
+            HEX => HEX0
         );
     
     decoder1: bin2seg7_decoder
         port map(
-            fib_number => d1,
-            HEX => HEX1;
+            fib_number => digit1,
+            HEX => HEX1
         );
     
     decoder2: bin2seg7_decoder
         port map(
-            fib_number => d2,
-            HEX => HEX2;
+            fib_number => digit2,
+            HEX => HEX2
         );
 
     decoder3: bin2seg7_decoder
         port map(
-            fib_number => d3,
-            HEX => HEX3;
+            fib_number => digit3,
+            HEX => HEX3
         );
 
     decoder4: bin2seg7_decoder
         port map(
-            fib_number => d4,
-            HEX => HEX4;
+            fib_number => digit4,
+            HEX => HEX4
         );
 
     decoder5: bin2seg7_decoder
         port map(
-            fib_number => d5,
-            HEX => HEX5;
+            fib_number => digit5,
+            HEX => HEX5
         );
 
 
