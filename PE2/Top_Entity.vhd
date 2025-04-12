@@ -38,8 +38,8 @@ end test;
 
 architecture Behavioral of test is
 
-    constant paddle_movl  : integer := -290;
-    constant paddle_movr  : integer := 290;
+    constant paddle_movl  : integer := -270;
+    constant paddle_movr  : integer := 270;
 
     -- Fibonacci Signals
     signal fib0, fib1 : unsigned(31 downto 0) := (others => '0');
@@ -64,7 +64,7 @@ architecture Behavioral of test is
 	signal prevB        : STD_LOGIC := '0';
     signal ChA_clean    : STD_LOGIC := '0';
     signal ChB_clean    : STD_LOGIC := '0';
-    constant mov_speed : integer := 10; 
+    constant mov_speed : integer := 15; 
     
     constant DEBOUNCE_DELAY : integer := 5; -- Reduced debounce delay for responsiveness
     signal debounce_counter : integer := 0;
@@ -215,10 +215,6 @@ begin
         end if;
     end if;
 end process;
-
-
-
-
 
     
     -- VGA Signal Routing
