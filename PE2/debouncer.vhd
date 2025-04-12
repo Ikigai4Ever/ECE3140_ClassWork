@@ -1,12 +1,18 @@
+--Name: Ty Ahrens 
+--Date: 4/12/2025
+--Purpose: Debouncer for Channel A and B of rotary encoder. Takes in the noisy signal
+--         and saves the signal input for each clock cycle to ensure that the signal
+--         is stable.
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity Debounce is
     Port (
-        clk     : in  STD_LOGIC;
-        noisy   : in  STD_LOGIC;
-        clean   : out STD_LOGIC
+        clk     : in  STD_LOGIC; -- DE10-Lite clock 
+        noisy   : in  STD_LOGIC; -- Input from rotary encoder
+        clean   : out STD_LOGIC  -- Debounced signal from this
     );
 end Debounce;
 
@@ -32,5 +38,5 @@ begin
         end if;
     end process;
 
-    clean <= debounced;
+    clean <= debounced;  -- set the debounced signal to output back to top_entity
 end Behavioral;

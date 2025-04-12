@@ -43,6 +43,7 @@ architecture Behavioral of test is
 
     -- Fibonacci Signals
     signal fib0, fib1 : unsigned(31 downto 0) := (others => '0');
+    signal digit0, digit1, digit2, digit3, digit4, digit5 : integer;
     signal clk_div    : integer := 0;
     signal tick       : std_logic := '0';
     signal tick_pulse : std_logic := '0';
@@ -63,12 +64,15 @@ architecture Behavioral of test is
 	signal prevB        : STD_LOGIC := '0';
     signal ChA_clean    : STD_LOGIC := '0';
     signal ChB_clean    : STD_LOGIC := '0';
-	 
+    constant mov_speed : integer := 10; 
+    
     constant DEBOUNCE_DELAY : integer := 5; -- Reduced debounce delay for responsiveness
     signal debounce_counter : integer := 0;
     signal rate_limit_counter : integer := 0;
     constant RATE_LIMIT : integer := 1; -- Reduced rate limit for smoother operation
 	 
+
+
 
     -- 7-segment decoder
     function to_7seg(d : integer) return std_logic_vector is
@@ -90,31 +94,13 @@ architecture Behavioral of test is
         return seg;
     end function;
 
-    -- Display Procedure
-    procedure display_number(signal num : unsigned(31 downto 0);
-                             signal HEX : out std_logic_vector(6 downto 0);
-                             signal HEX1 : out std_logic_vector(6 downto 0);
-                             signal HEX2 : out std_logic_vector(6 downto 0);
-                             signal HEX3 : out std_logic_vector(6 downto 0);
-                             signal HEX4 : out std_logic_vector(6 downto 0);
-                             signal HEX5 : out std_logic_vector(6 downto 0)) is
-        variable n : integer := to_integer(num);
-        variable d0, d1, d2, d3, d4, d5 : integer;
-    begin
-        d0 := n mod 10; n := n / 10;
-        d1 := n mod 10; n := n / 10;
-        d2 := n mod 10; n := n / 10;
-        d3 := n mod 10; n := n / 10;
-        d4 := n mod 10; n := n / 10;
-        d5 := n mod 10;
-
-        HEX  <= to_7seg(d0);
-        HEX1 <= to_7seg(d1);
-        HEX2 <= to_7seg(d2);
-        HEX3 <= to_7seg(d3);
-        HEX4 <= to_7seg(d4);
-        HEX5 <= to_7seg(d5);
-    end procedure;
+    -- 7-seg decoder
+    component bin2seg7_decoder is
+        port(
+            fib_number : IN integer; -- 4-bit binary input
+            HEX : OUT std_logic_vector(6 downto 0)    -- seven segment output   
+            );
+    end bin2seg7_decoder;
 
     -- VGA Components
     component vga_pll_25_175
@@ -124,6 +110,7 @@ architecture Behavioral of test is
         );
     end component;
 
+    -- VGA Controller component
     component vga_controller
         port (
             pixel_clk : in  STD_LOGIC;
@@ -138,6 +125,7 @@ architecture Behavioral of test is
         );
     end component;
 
+    -- Image generator from homework 7
     component hw_image_generator
         port (
             disp_ena : in  STD_LOGIC;
@@ -152,8 +140,25 @@ architecture Behavioral of test is
 
 begin
 
+    -- Fibonacci number digit divider
+    fib_digits : process(CLK)
+        variable temp : integer;
+    begin 
+        if rising_edge(CLK) then
+            temp := to_integer(fib0);
+
+            digit0 <= temp mod 10; temp := temp / 10;
+            digit1 <= temp mod 10; temp := temp / 10;
+            digit2 <= temp mod 10; temp := temp / 10;
+            digit3 <= temp mod 10; temp := temp / 10;
+            digit4 <= temp mod 10; temp := temp / 10;
+            digit5 <= temp mod 10; 
+        end if;
+    end process;
+    
+
     -- Fibonacci Clock Divider
-    process(CLK)
+    fib_direction : process(CLK)
     begin
         if rising_edge(CLK) then
             clk_div <= clk_div + 1;
@@ -167,14 +172,14 @@ begin
         end if;
     end process;
 
-    process(CLK)
+    tick_fib : process(CLK)
     begin
         if rising_edge(CLK) then
             tick_pulse <= tick;
         end if;
     end process;
 
-    process(CLK)
+    calculate_fib : process(CLK)
         variable next_fib : unsigned(31 downto 0);
     begin
         if rising_edge(CLK) then
@@ -204,7 +209,6 @@ begin
             end if;
         end if;
     end process;
-
     
 
 --Rotary encoder process with debouncing, rate limiting, and clamping
@@ -221,11 +225,11 @@ begin
                 -- Determine direction using ChB
                 if ChB_clean = '0' then  -- Clockwise
                     if RE_Val < paddle_movr then
-                        RE_Val <= RE_Val + 8;  -- Adjust movement speed
+                        RE_Val <= RE_Val + mov_speed;  -- Adjust movement speed
                     end if;
                 else  -- Counter-clockwise
                     if RE_Val > paddle_movl then
-                        RE_Val <= RE_Val - 8;
+                        RE_Val <= RE_Val - mov_speed;
                     end if;
                 end if;
             end if;
@@ -235,11 +239,6 @@ begin
 end process;
 
 
-    -- Fibonacci Display
-    process(fib0)
-    begin
-        display_number(fib0, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
-    end process;
 
 
 
@@ -249,6 +248,44 @@ end process;
     U2: vga_controller port map(pll_out_clk, '1', h_sync_m, v_sync_m, dispEn, colSignal, rowSignal, open, open);
     U3: hw_image_generator port map(dispEn, rowSignal, colSignal, RE_Val, red_m, green_m, blue_m);
     
+    -- Decoders for fibonacci numbers to seven segments
+    decoder0: bin2seg7_decoder
+        port map(
+            fib_number => d0,
+            HEX => HEX0;
+        );
+    
+    decoder1: bin2seg7_decoder
+        port map(
+            fib_number => d1,
+            HEX => HEX1;
+        );
+    
+    decoder2: bin2seg7_decoder
+        port map(
+            fib_number => d2,
+            HEX => HEX2;
+        );
+
+    decoder3: bin2seg7_decoder
+        port map(
+            fib_number => d3,
+            HEX => HEX3;
+        );
+
+    decoder4: bin2seg7_decoder
+        port map(
+            fib_number => d4,
+            HEX => HEX4;
+        );
+
+    decoder5: bin2seg7_decoder
+        port map(
+            fib_number => d5,
+            HEX => HEX5;
+        );
+
+
     -- Debouncers for the rortary encoder signals
     debounce_ChA: entity work.Debounce
         port map (
