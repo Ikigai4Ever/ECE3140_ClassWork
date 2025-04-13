@@ -32,7 +32,7 @@ architecture behavior of hw_image_generator is
 	constant paddle_width   : integer := 60;
 
     constant border_width  : integer := 15;
-    constant BORDER_TOP   : integer := 0 + border_width;
+    constant BORDER_TOP   : integer := 0 + border_width; 
     constant BORDER_LEFT  : integer := -2 + border_width;
     constant BORDER_RIGHT : integer := 635 - border_width;
 
@@ -112,9 +112,9 @@ begin
             paddle_posR := RE_Val + paddle_width / 2;
 
             -- Paddle coloring
-            if row >= paddle_top and row <= paddle_bottom and column >= paddle_posL and column <= paddle_posR then
-                red   <= X"FF";
-                green <= X"FF";
+            if row >= paddle_top and row <= paddle_bottom and column >= paddle_posL  and column <= paddle_posR then
+                red   <= X"00";
+                green <= X"00";
                 blue  <= X"FF";  -- Bright white
             -- Border coloring
             elsif row <= BORDER_TOP or column <= BORDER_LEFT or column >= BORDER_RIGHT then

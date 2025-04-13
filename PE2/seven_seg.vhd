@@ -24,21 +24,21 @@ begin
             --sevenSeg 0 to 9
             case fib_number is 
                 when 0 =>
-                    sevenSeg <= "0000001" ; -- 0
+                    sevenSeg <= "1000000" ; -- 0
                 when 1 =>
-                    sevenSeg <= "1001111" ; -- 1
+                    sevenSeg <= "1111001" ; -- 1
                 when 2 =>
-                    sevenSeg <= "0010010" ; -- 2
+                    sevenSeg <= "0100100" ; -- 2
                 when 3 =>
-                    sevenSeg <= "0000110" ; -- 3
+                    sevenSeg <= "0110000" ; -- 3
                 when 4 =>
-                    sevenSeg <= "1001100" ; -- 4
+                    sevenSeg <= "0011001" ; -- 4
                 when 5 =>
-                    sevenSeg <= "0100100" ; -- 5
+                    sevenSeg <= "0010010" ; -- 5
                 when 6 =>
-                    sevenSeg <= "0100000" ; -- 6
+                    sevenSeg <= "0000010" ; -- 6
                 when 7 =>
-                    sevenSeg <= "0001111" ; -- 7
+                    sevenSeg <= "1111000" ; -- 7
                 when 8 =>
                     sevenSeg <= "0000000" ; -- 8
                 when 9 =>

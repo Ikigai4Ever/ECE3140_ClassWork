@@ -65,6 +65,10 @@ architecture Behavioral of test is
     signal ChA_clean    : STD_LOGIC := '0';
     signal ChB_clean    : STD_LOGIC := '0';
     constant mov_speed : integer := 15; 
+    constant paddle_start_x : integer := 320;
+    constant border_right : integer := 620; -- Value from the image generator
+    constant border_left  : integer := 13;  -- Value from the image generator
+    constant paddle_length : integer := 60; -- Paddle length
     
     constant DEBOUNCE_DELAY : integer := 5; -- Reduced debounce delay for responsiveness
     signal debounce_counter : integer := 0;
@@ -195,18 +199,18 @@ process(CLK)
 begin
     if rising_edge(CLK) then
         if KEY1 = '0' then
-            RE_Val <= 0;
+            RE_Val <= paddle_start_x;
             prevA <= '0';
         else
             -- Detect rising edge on ChA
             if (prevA = '0') and (ChA_clean = '1') then
                 -- Determine direction using ChB
                 if ChB_clean = '0' then  -- Clockwise
-                    if RE_Val < paddle_movr then
+                    if (RE_Val < paddle_movr) and ((RE_Val - paddle_length) < border_right) then
                         RE_Val <= RE_Val + mov_speed;  -- Adjust movement speed
                     end if;
                 else  -- Counter-clockwise
-                    if RE_Val > paddle_movl then
+                    if (RE_Val > paddle_movl) and (RE_Val > border_left)  then
                         RE_Val <= RE_Val - mov_speed;
                     end if;
                 end if;
