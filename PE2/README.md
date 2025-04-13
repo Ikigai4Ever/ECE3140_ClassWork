@@ -2,6 +2,8 @@
 
 This file is a partial product of the game breakout that has a movable paddle limited by boundaries, two rows of blocks that are generated and turned off if they match the fibonacci number currently displayed on the seven segment displays that are on the DE10-Lite development board. 
 
+I had also recieved assistance from Blake Hudson and talked with Tyler and Evan about some of the process for the encoder.
+
 # File Explainations
 
 ## Top_Entity 
