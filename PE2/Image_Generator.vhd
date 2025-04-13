@@ -1,3 +1,7 @@
+--Name: Ty Ahrens 
+--Date: 4/13/2025
+--Purpose: Generate an image for the blocks, paddle, and border
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
@@ -5,20 +9,22 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity hw_image_generator is
     port (
-        disp_ena : in  STD_LOGIC;
-        row      : in  INTEGER;
-        column   : in  INTEGER;
-	    RE_Val	 : in  integer;
-        red      : out STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
-        green    : out STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
-        blue     : out STD_LOGIC_VECTOR(7 downto 0) := (others => '0')
+        disp_ena        : in  STD_LOGIC;
+        row             : in  INTEGER;
+        column          : in  INTEGER;
+	    encoder_value   : in  INTEGER;
+        fib1            : in  INTEGER;
+        fib2            : in  INTEGER;
+        red             : out STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+        green           : out STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+        blue            : out STD_LOGIC_VECTOR(7 downto 0) := (others => '0')
     );
 end hw_image_generator;
 
 architecture behavior of hw_image_generator is
 
     constant block_start_x : integer := 20;
-    constant block_start_y : integer := 65;
+    constant block_start_y : integer := 100;
     constant block_width   : integer := 33;
     constant block_height  : integer := 10;
     constant block_width_spacing : integer := 7;
@@ -42,7 +48,7 @@ architecture behavior of hw_image_generator is
     constant row2_bottom : integer := row2_top + block_height;
 
     -- Row array constants for FOR loop
-    type row_array is array(1 to 2) of integer;
+    type row_array is array(0 to 1) of integer;
     constant row_tops : row_array := (
         row1_top, row2_top
     );
@@ -82,7 +88,7 @@ architecture behavior of hw_image_generator is
     constant column15_right : integer := column15_left + block_width;
 
     -- Column arrary constants for FOR loop
-    type column_array is array(1 to 15) of integer;
+    type column_array is array(0 to 14) of integer;
     constant column_lefts : column_array := (
         column1_left, column2_left, column3_left, column4_left,
         column5_left, column6_left, column7_left, column8_left,
@@ -98,7 +104,7 @@ architecture behavior of hw_image_generator is
 	 
 
 begin	 	 
-    process(disp_ena, row, column, RE_Val)
+    process(disp_ena, row, column, encoder_value, fib1, fib2)
         variable paddle_posL : integer;
         variable paddle_posR : integer;
     begin
@@ -107,16 +113,16 @@ begin
         green <= X"00";
         blue  <= X"00"; 
 
-        if disp_ena = '1' then            -- Paddle position based on RE_Val
-            paddle_posL := RE_Val - paddle_width / 2;
-            paddle_posR := RE_Val + paddle_width / 2;
+        if disp_ena = '1' then            -- Paddle position based on encoder_value
+            paddle_posL := encoder_value - paddle_width / 2;
+            paddle_posR := encoder_value + paddle_width / 2;
 
-            -- Paddle coloring
+            -- Paddle coloring (White)
             if row >= paddle_top and row <= paddle_bottom and column >= paddle_posL  and column <= paddle_posR then
-                red   <= X"00";
-                green <= X"00";
-                blue  <= X"FF";  -- Bright white
-            -- Border coloring
+                red   <= X"FF";
+                green <= X"FF";
+                blue  <= X"FF";  
+            -- Border coloring (White)
             elsif row <= BORDER_TOP or column <= BORDER_LEFT or column >= BORDER_RIGHT then
                 red   <= X"FF";
                 green <= X"FF";
@@ -124,18 +130,31 @@ begin
             else 
 
                 -- Loop over rows and columns
-                for row_idx in 1 to 2 loop
-                    for col_idx in 1 to 15 loop
+                for row_idx in 0 to 1 loop
+                    for col_idx in 0 to 14 loop
                         if row >= row_tops(row_idx) and row <= row_bottoms(row_idx) and
-                        column >= column_lefts(col_idx) and column <= column_rights(col_idx) then
-                            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-                        else 
-                            --red <= X"00"; green <= X"00"; blue <= X"00";  -- Default to black
+                           column >= column_lefts(col_idx) and column <= column_rights(col_idx) then
+                            if ((fib1 = 1) and (fib2 = 0) and (col_idx = 0) and (row_idx = 0)) then
+                                red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 1
+                            elsif ((fib1 = 2) and (fib2 = 0) and (col_idx = 1) and (row_idx = 0)) then
+                                red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 2
+                            elsif ((fib1 = 3) and (fib2 = 0) and (col_idx = 2) and (row_idx = 0)) then
+                                red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 3
+                            elsif ((fib1 = 5) and (fib2 = 0) and (col_idx = 4) and (row_idx = 0)) then
+                                red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 5
+                            elsif ((fib1 = 8) and (fib2 = 0) and (col_idx = 7) and (row_idx = 0)) then
+                                red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 8
+                            elsif ((fib1 = 3) and (fib2 = 1) and (col_idx = 12) and (row_idx = 0)) then
+                                red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 13
+                            elsif ((fib1 = 1) and (fib2 = 2) and (col_idx = 6) and (row_idx = 1)) then
+                                red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 21
+                            else 
+                                red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
+                            end if;
                         end if;
                     end loop;
                 end loop;
             end if;
         end if;
-		
     end process;
 end behavior;
