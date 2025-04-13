@@ -141,15 +141,15 @@ begin
             digit5 <= temp mod 10; 
         end if;
     end process;
-    
-
-    -- Fibonacci Clock Divider
-    fib_direction : process(CLK)
+        
+    -- Fibonacci Clock Divider Process
+    fib_clk_divider : process(CLK)
     begin
         if rising_edge(CLK) then
             clk_div <= clk_div + 1;
-            if (KEY0 = '1' and clk_div >= FORWARD_TICKS) or
-               (KEY0 = '0' and clk_div >= REVERSE_TICKS) then
+
+            if ((KEY0 = '1' and clk_div >= FORWARD_TICKS) or
+                (KEY0 = '0' and clk_div >= REVERSE_TICKS)) then
                 tick <= '1';
                 clk_div <= 0;
             else
@@ -158,36 +158,40 @@ begin
         end if;
     end process;
 
-    tick_fib : process(CLK)
+    -- Tick Pulse Registration
+    tick_register : process(CLK)
     begin
         if rising_edge(CLK) then
             tick_pulse <= tick;
         end if;
     end process;
 
-    calculate_fib : process(CLK)
-        variable next_fib : unsigned(31 downto 0);
+    -- Fibonacci Sequence Computation
+    fibonacci_logic : process(CLK)
+        variable next_value : unsigned(31 downto 0);
     begin
         if rising_edge(CLK) then
             if tick_pulse = '1' then
-                if fib0 = 0 and fib1 = 0 then
+                if (fib0 = 0 and fib1 = 0) then
                     fib0 <= to_unsigned(0, 32);
                     fib1 <= to_unsigned(1, 32);
-                elsif KEY0 = '1' then
-                    next_fib := fib0 + fib1;
-                    if next_fib <= to_unsigned(999999, 32) then
+                elsif (KEY0 = '1') then
+                    next_value := fib0 + fib1;
+                    if (next_value <= to_unsigned(999999, 32)) then
                         fib0 <= fib1;
-                        fib1 <= next_fib;
+                        fib1 <= next_value;
                     else
+                        -- Reset if out of range
                         fib0 <= to_unsigned(0, 32);
                         fib1 <= to_unsigned(1, 32);
                     end if;
                 else
-                    if fib1 > fib0 then
-                        next_fib := fib1 - fib0;
+                    if (fib1 > fib0) then
+                        next_value := fib1 - fib0;
                         fib1 <= fib0;
-                        fib0 <= next_fib;
+                        fib0 <= next_value;
                     else
+                        -- Reset in case of invalid backward subtraction
                         fib0 <= to_unsigned(0, 32);
                         fib1 <= to_unsigned(1, 32);
                     end if;
@@ -195,8 +199,9 @@ begin
             end if;
         end if;
     end process;
-    
 
+
+    
 --Rotary encoder process with debouncing, rate limiting, and clamping
 --Rotary encoder process with optimized debouncing and rate limiting
 process(CLK)
