@@ -100,7 +100,7 @@ architecture behavior of hw_image_generator is
 	 
 
 begin	 	 
-    process(disp_ena, row, column, RE_Val, fib1)
+    process(disp_ena, row, column, RE_Val, fib1, fib2)
         variable paddle_posL : integer;
         variable paddle_posR : integer;
     begin
@@ -129,7 +129,7 @@ begin
                 for row_idx in 0 to 1 loop
                     for col_idx in 0 to 14 loop
                         if row >= row_tops(row_idx) and row <= row_bottoms(row_idx) and
-                        column >= column_lefts(col_idx) and column <= column_rights(col_idx) then
+                           column >= column_lefts(col_idx) and column <= column_rights(col_idx) then
                             if ((fib1 = 1) and (fib2 = 0) and (col_idx = 0) and (row_idx = 0)) then
                                 red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 1
                             elsif ((fib1 = 2) and (fib2 = 0) and (col_idx = 1) and (row_idx = 0)) then
@@ -140,15 +140,13 @@ begin
                                 red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 5
                             elsif ((fib1 = 8) and (fib2 = 0) and (col_idx = 7) and (row_idx = 0)) then
                                 red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 8
-                            elsif ((fib1 = 1) and (fib2 = 3) and (col_idx = 12) and (row_idx = 0)) then
+                            elsif ((fib1 = 3) and (fib2 = 1) and (col_idx = 12) and (row_idx = 0)) then
                                 red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 13
-                            elsif ((fib1 = 2) and (fib2 = 1) and (col_idx = 6) and (row_idx = 1)) then
+                            elsif ((fib1 = 1) and (fib2 = 2) and (col_idx = 6) and (row_idx = 1)) then
                                 red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 21
                             else 
                                 red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
                             end if;
-                        else 
-                            --red <= X"00"; green <= X"00"; blue <= X"00";  -- Default to black
                         end if;
                     end loop;
                 end loop;
