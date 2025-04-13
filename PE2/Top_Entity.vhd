@@ -64,11 +64,11 @@ architecture Behavioral of test is
 	signal prevB        : STD_LOGIC := '0';
     signal ChA_clean    : STD_LOGIC := '0';
     signal ChB_clean    : STD_LOGIC := '0';
-    constant mov_speed : integer := 15; 
+    constant mov_speed : integer := 20; 
     constant paddle_start_x : integer := 320;
-    constant border_right : integer := 620; -- Value from the image generator
-    constant border_left  : integer := 13;  -- Value from the image generator
-    constant paddle_length : integer := 60; -- Paddle length
+    constant border_right : integer := 630; -- Value from the image generator
+    constant border_left  : integer := 10;  -- Value from the image generator
+    constant paddle_length : integer := 50; -- Paddle length
     
     constant DEBOUNCE_DELAY : integer := 5; -- Reduced debounce delay for responsiveness
     signal debounce_counter : integer := 0;
@@ -206,11 +206,11 @@ begin
             if (prevA = '0') and (ChA_clean = '1') then
                 -- Determine direction using ChB
                 if ChB_clean = '0' then  -- Clockwise
-                    if (RE_Val < paddle_movr) and ((RE_Val - paddle_length) < border_right) then
+                    if (RE_Val < paddle_movr) and ((RE_Val + paddle_length) < border_right) then
                         RE_Val <= RE_Val + mov_speed;  -- Adjust movement speed
                     end if;
                 else  -- Counter-clockwise
-                    if (RE_Val > paddle_movl) and (RE_Val > border_left)  then
+                    if (RE_Val > paddle_movl) and ((RE_Val - paddle_length) > border_left)  then
                         RE_Val <= RE_Val - mov_speed;
                     end if;
                 end if;
