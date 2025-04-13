@@ -9,7 +9,8 @@ entity hw_image_generator is
         row         : in  INTEGER;
         column      : in  INTEGER;
 	    RE_Val	    : in  INTEGER;
-        fib_number  : in  INTEGER;
+        fib1        : in  INTEGER;
+        fib2        : in  INTEGER;
         red         : out STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
         green       : out STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
         blue        : out STD_LOGIC_VECTOR(7 downto 0) := (others => '0')
@@ -99,7 +100,7 @@ architecture behavior of hw_image_generator is
 	 
 
 begin	 	 
-    process(disp_ena, row, column, RE_Val)
+    process(disp_ena, row, column, RE_Val, fib1)
         variable paddle_posL : integer;
         variable paddle_posR : integer;
     begin
@@ -112,12 +113,12 @@ begin
             paddle_posL := RE_Val - paddle_width / 2;
             paddle_posR := RE_Val + paddle_width / 2;
 
-            -- Paddle coloring
+            -- Paddle coloring (White)
             if row >= paddle_top and row <= paddle_bottom and column >= paddle_posL  and column <= paddle_posR then
-                red   <= X"00";
-                green <= X"00";
-                blue  <= X"FF";  -- Bright white
-            -- Border coloring
+                red   <= X"FF";
+                green <= X"FF";
+                blue  <= X"FF";  
+            -- Border coloring (White)
             elsif row <= BORDER_TOP or column <= BORDER_LEFT or column >= BORDER_RIGHT then
                 red   <= X"FF";
                 green <= X"FF";
@@ -129,19 +130,19 @@ begin
                     for col_idx in 0 to 14 loop
                         if row >= row_tops(row_idx) and row <= row_bottoms(row_idx) and
                         column >= column_lefts(col_idx) and column <= column_rights(col_idx) then
-                            if ((fib_number = 1) and (col_idx = 0) and (row_idx = 0)) then
+                            if ((fib1 = 1) and (fib2 = 0) and (col_idx = 0) and (row_idx = 0)) then
                                 red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 1
-                            elsif ((fib_number = 2) and (col_idx = 1) and (row_idx = 0)) then
+                            elsif ((fib1 = 2) and (fib2 = 0) and (col_idx = 1) and (row_idx = 0)) then
                                 red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 2
-                            elsif ((fib_number = 3) and (col_idx = 2) and (row_idx = 0)) then
+                            elsif ((fib1 = 3) and (fib2 = 0) and (col_idx = 2) and (row_idx = 0)) then
                                 red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 3
-                            elsif ((fib_number = 5) and (col_idx = 4) and (row_idx = 0)) then
+                            elsif ((fib1 = 5) and (fib2 = 0) and (col_idx = 4) and (row_idx = 0)) then
                                 red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 5
-                            elsif ((fib_number = 8) and (col_idx = 7) and (row_idx = 0)) then
+                            elsif ((fib1 = 8) and (fib2 = 0) and (col_idx = 7) and (row_idx = 0)) then
                                 red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 8
-                            elsif ((fib_number = 13) and (col_idx = 12) and (row_idx = 0)) then
+                            elsif ((fib1 = 1) and (fib2 = 3) and (col_idx = 12) and (row_idx = 0)) then
                                 red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 13
-                            elsif ((fib_number = 21) and (col_idx = 6) and (row_idx = 1)) then
+                            elsif ((fib1 = 2) and (fib2 = 1) and (col_idx = 6) and (row_idx = 1)) then
                                 red <= X"00"; green <= X"00"; blue <= X"00";  -- Black for 21
                             else 
                                 red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
