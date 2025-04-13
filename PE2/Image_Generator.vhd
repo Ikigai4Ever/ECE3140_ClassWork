@@ -1,3 +1,7 @@
+--Name: Ty Ahrens 
+--Date: 4/13/2025
+--Purpose: Generate an image for the blocks, paddle, and border
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;

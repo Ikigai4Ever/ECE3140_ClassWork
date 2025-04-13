@@ -1,5 +1,5 @@
 --Name: Ty Ahrens 
---Date: 4/12/2025
+--Date: 4/13/2025
 --Purpose: Take in bits from fibonacci counter and display on 7 segment display
 
 library IEEE;
