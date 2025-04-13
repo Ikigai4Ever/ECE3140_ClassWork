@@ -17,11 +17,11 @@ end hw_image_generator;
 
 architecture behavior of hw_image_generator is
 
-    constant block_start_x : integer := 25;
-    constant block_start_y : integer := 60;
-    constant block_width   : integer := 35;
+    constant block_start_x : integer := 20;
+    constant block_start_y : integer := 65;
+    constant block_width   : integer := 33;
     constant block_height  : integer := 10;
-    constant block_width_spacing : integer := 8;
+    constant block_width_spacing : integer := 7;
     constant block_height_spacing : integer := 5; 
 
 
@@ -31,10 +31,10 @@ architecture behavior of hw_image_generator is
     constant paddle_right   : integer := 350;
 	constant paddle_width   : integer := 60;
 
-    constant border_width  : integer := 20;
+    constant border_width  : integer := 15;
     constant BORDER_TOP   : integer := 0 + border_width;
-    constant BORDER_LEFT  : integer := 0 + border_width;
-    constant BORDER_RIGHT : integer := 640 - border_width;
+    constant BORDER_LEFT  : integer := -2 + border_width;
+    constant BORDER_RIGHT : integer := 635 - border_width;
 
     constant row1_top    : integer := block_start_y;
     constant row1_bottom : integer := row1_top + block_height;
@@ -78,20 +78,22 @@ architecture behavior of hw_image_generator is
     constant column13_right : integer := column13_left + block_width;
     constant column14_left  : integer := column13_right + block_width_spacing;
     constant column14_right : integer := column14_left + block_width;
+    constant column15_left  : integer := column14_right + block_width_spacing;
+    constant column15_right : integer := column15_left + block_width;
 
     -- Column arrary constants for FOR loop
-    type column_array is array(1 to 14) of integer;
+    type column_array is array(1 to 15) of integer;
     constant column_lefts : column_array := (
         column1_left, column2_left, column3_left, column4_left,
         column5_left, column6_left, column7_left, column8_left,
         column9_left, column10_left, column11_left, column12_left,
-        column13_left, column14_left
+        column13_left, column14_left, column15_left
     );
     constant column_rights : column_array := (
         column1_right, column2_right, column3_right, column4_right,
         column5_right, column6_right, column7_right, column8_right,
         column9_right, column10_right, column11_right, column12_right,
-        column13_right, column14_right
+        column13_right, column14_right, column15_right
     );
 	 
 
@@ -123,7 +125,7 @@ begin
 
                 -- Loop over rows and columns
                 for row_idx in 1 to 2 loop
-                    for col_idx in 1 to 14 loop
+                    for col_idx in 1 to 15 loop
                         if row >= row_tops(row_idx) and row <= row_bottoms(row_idx) and
                         column >= column_lefts(col_idx) and column <= column_rights(col_idx) then
                             red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
