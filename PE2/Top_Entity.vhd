@@ -110,13 +110,14 @@ architecture Behavioral of test is
     -- Image generator from homework 7
     component hw_image_generator
         port (
-            disp_ena : in  STD_LOGIC;
-            row      : in  INTEGER;
-            column   : in  INTEGER;
-            RE_Val   : in  integer;
-            red      : out STD_LOGIC_VECTOR(7 downto 0);
-            green    : out STD_LOGIC_VECTOR(7 downto 0);
-            blue     : out STD_LOGIC_VECTOR(7 downto 0)
+            disp_ena    : in  STD_LOGIC;
+            row         : in  INTEGER;
+            column      : in  INTEGER;
+            RE_Val      : in  INTEGER;
+            fib_number  : in  INTEGER;
+            red         : out STD_LOGIC_VECTOR(7 downto 0);
+            green       : out STD_LOGIC_VECTOR(7 downto 0);
+            blue        : out STD_LOGIC_VECTOR(7 downto 0)
         );
     end component;
 
@@ -224,7 +225,7 @@ end process;
     -- VGA Signal Routing
     U1: vga_pll_25_175 port map(CLK, pll_out_clk);
     U2: vga_controller port map(pll_out_clk, '1', h_sync_m, v_sync_m, dispEn, colSignal, rowSignal, open, open);
-    U3: hw_image_generator port map(dispEn, rowSignal, colSignal, RE_Val, red_m, green_m, blue_m);
+    U3: hw_image_generator port map(dispEn, rowSignal, colSignal, RE_Val, digit0, red_m, green_m, blue_m);
     
     -- Decoders for fibonacci numbers to seven segments
     decoder0: bin2seg7_decoder
