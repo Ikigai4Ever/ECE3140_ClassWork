@@ -31,9 +31,10 @@ architecture behavior of hw_image_generator is
     constant paddle_right   : integer := 350;
 	constant paddle_width   : integer := 60;
 
-    constant BORDER_TOP   : integer := 10;
-    constant BORDER_LEFT  : integer := 10;
-    constant BORDER_RIGHT : integer := 630;
+    constant border_width  : integer := 20;
+    constant BORDER_TOP   : integer := 0 + border_width;
+    constant BORDER_LEFT  : integer := 0 + border_width;
+    constant BORDER_RIGHT : integer := 640 - border_width;
 
     constant row1_top    : integer := block_start_y;
     constant row1_bottom : integer := row1_top + block_height;
@@ -41,10 +42,11 @@ architecture behavior of hw_image_generator is
     constant row2_bottom : integer := row2_top + block_height;
 
     -- Row array constants for FOR loop
-    constant row_tops : array(1 to 2) of integer := (
+    type row_array is array(1 to 2) of integer;
+    constant row_tops : row_array := (
         row1_top, row2_top
     );
-    constant row_bottoms : array(1 to 2) of integer := (
+    constant row_bottoms : row_array := (
         row1_bottom, row2_bottom
     );
 
@@ -78,13 +80,14 @@ architecture behavior of hw_image_generator is
     constant column14_right : integer := column14_left + block_width;
 
     -- Column arrary constants for FOR loop
-    constant column_lefts : array(1 to 14) of integer := (
+    type column_array is array(1 to 14) of integer;
+    constant column_lefts : column_array := (
         column1_left, column2_left, column3_left, column4_left,
         column5_left, column6_left, column7_left, column8_left,
         column9_left, column10_left, column11_left, column12_left,
         column13_left, column14_left
     );
-    constant column_rights : array(1 to 14) of integer := (
+    constant column_rights : column_array := (
         column1_right, column2_right, column3_right, column4_right,
         column5_right, column6_right, column7_right, column8_right,
         column9_right, column10_right, column11_right, column12_right,
@@ -97,47 +100,40 @@ begin
         variable paddle_posL : integer;
         variable paddle_posR : integer;
     begin
-        -- Default black background
+        -- Default color to black
         red   <= X"00";
         green <= X"00";
-        blue  <= X"00";
+        blue  <= X"00"; 
 
-        -- Paddle position based on RE_Val
-        paddle_posL := RE_Val - paddle_width / 2;
-        paddle_posR := RE_Val + paddle_width / 2;
+        if disp_ena = '1' then            -- Paddle position based on RE_Val
+            paddle_posL := RE_Val - paddle_width / 2;
+            paddle_posR := RE_Val + paddle_width / 2;
 
-        -- Paddle coloring
-        if row >= paddle_top and row <= paddle_bottom and column >= paddle_posL and column <= paddle_posR then
-            red   <= X"FF";
-            green <= X"FF";
-            blue  <= X"FF";  -- Bright white
-		end if;
+            -- Paddle coloring
+            if row >= paddle_top and row <= paddle_bottom and column >= paddle_posL and column <= paddle_posR then
+                red   <= X"FF";
+                green <= X"FF";
+                blue  <= X"FF";  -- Bright white
+            -- Border coloring
+            elsif row <= BORDER_TOP or column <= BORDER_LEFT or column >= BORDER_RIGHT then
+                red   <= X"FF";
+                green <= X"FF";
+                blue  <= X"FF";
+            else 
 
-        -- Loop over rows and columns
-        for row_idx in 1 to 8 loop
-            for col_idx in 1 to 14 loop
-                if row >= row_tops(row_idx) and row <= row_bottoms(row_idx) and
-                column >= column_lefts(col_idx) and column <= column_rights(col_idx) then
-                
-                red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
-                end if;
-            end loop;
-        end loop;
-
-
-
-		      -- Border coloring
-        if column <= BORDER_LEFT or column >= BORDER_RIGHT then
-            red   <= X"EF";
-            green <= X"EF";
-            blue  <= X"EF";
-			end if;
-        if row <= BORDER_TOP then
-            red   <= X"EF";
-            green <= X"EF";
-            blue  <= X"EF";
-		end if;
-
+                -- Loop over rows and columns
+                for row_idx in 1 to 2 loop
+                    for col_idx in 1 to 14 loop
+                        if row >= row_tops(row_idx) and row <= row_bottoms(row_idx) and
+                        column >= column_lefts(col_idx) and column <= column_rights(col_idx) then
+                            red <= X"FF"; green <= X"FF"; blue <= X"FF";  -- Bright white
+                        else 
+                            --red <= X"00"; green <= X"00"; blue <= X"00";  -- Default to black
+                        end if;
+                    end loop;
+                end loop;
+            end if;
+        end if;
 		
     end process;
 end behavior;
