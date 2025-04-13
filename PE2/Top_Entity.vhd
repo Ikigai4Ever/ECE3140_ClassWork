@@ -10,11 +10,11 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
-entity test is
+entity top_entity is
     Port (
         -- Clocks and control
         CLK         : in  STD_LOGIC;
-        KEY0        : in  STD_LOGIC; -- active-low reset/control
+        KEY0        : in  STD_LOGIC;
 		KEY1 	    : in  STD_LOGIC;
 		  
         ChA         : in  STD_LOGIC; -- CLK on RE
@@ -35,9 +35,9 @@ entity test is
         green_m     : out STD_LOGIC_VECTOR(7 downto 0);
         blue_m      : out STD_LOGIC_VECTOR(7 downto 0)
     );
-end test;
+end top_entity;
 
-architecture Behavioral of test is
+architecture Behavioral of top_entity is
 
     constant paddle_movl  : integer := 40;
     constant paddle_movr  : integer := 600;
@@ -60,7 +60,7 @@ architecture Behavioral of test is
     signal colSignal   : integer;
 
     -- Paddle Position from Rotary Encoder
-    signal RE_Val       : integer := 320;
+    signal encoder_value: integer := 320;
 	signal prevA	    : STD_LOGIC := '0';
 	signal prevB        : STD_LOGIC := '0';
     signal ChA_clean    : STD_LOGIC := '0';
@@ -78,10 +78,10 @@ architecture Behavioral of test is
 	 
 
     -- 7-seg decoder
-    component bin2seg7_decoder is
+    component seg7_decoder is
         port(
-            fib_number : IN integer; -- 4-bit binary input
-            HEX : OUT std_logic_vector(6 downto 0)    -- seven segment output   
+            fib_number  : IN integer; -- Input from Fibonacci counter
+            HEX         : OUT std_logic_vector(6 downto 0)    -- seven segment output   
             );
     end component;
 
@@ -111,15 +111,15 @@ architecture Behavioral of test is
     -- Image generator from homework 7
     component hw_image_generator
         port (
-            disp_ena    : in  STD_LOGIC;
-            row         : in  INTEGER;
-            column      : in  INTEGER;
-            RE_Val      : in  INTEGER;
-            fib1        : in  INTEGER;
-            fib2        : in  INTEGER;
-            red         : out STD_LOGIC_VECTOR(7 downto 0);
-            green       : out STD_LOGIC_VECTOR(7 downto 0);
-            blue        : out STD_LOGIC_VECTOR(7 downto 0)
+            disp_ena        : in  STD_LOGIC;
+            row             : in  INTEGER;
+            column          : in  INTEGER;
+            encoder_value   : in  INTEGER;
+            fib1            : in  INTEGER;
+            fib2            : in  INTEGER;
+            red             : out STD_LOGIC_VECTOR(7 downto 0);
+            green           : out STD_LOGIC_VECTOR(7 downto 0);
+            blue            : out STD_LOGIC_VECTOR(7 downto 0)
         );
     end component;
 
@@ -131,7 +131,8 @@ begin
     begin 
         if rising_edge(CLK) then
             temp := to_integer(fib0);
-
+            
+            -- Calculate the digits of the Fibonacci number
             digit0 <= temp mod 10; temp := temp / 10;
             digit1 <= temp mod 10; temp := temp / 10;
             digit2 <= temp mod 10; temp := temp / 10;
@@ -202,22 +203,22 @@ process(CLK)
 begin
     if rising_edge(CLK) then
         if KEY1 = '0' then
-            RE_Val <= paddle_start_x;
+            encoder_value <= paddle_start_x;
             prevA <= '0';
         else
             -- Detect rising edge on ChA
             if (prevA = '0') and (ChA_clean = '1') then
                 -- Determine direction using ChB
                 if ChB_clean = '0' then  -- Clockwise
-                    if (RE_Val < paddle_movr) and ((RE_Val + paddle_length) < border_right) then
-                        RE_Val <= RE_Val + mov_speed;  -- Adjust movement speed
+                    if (encoder_value < paddle_movr) and ((encoder_value + paddle_length) < border_right) then
+                        encoder_value <= encoder_value + mov_speed;  -- Adjust movement speed
                     end if;
                 else  -- Counter-clockwise
-                    if (RE_Val > paddle_movl) and ((RE_Val - paddle_length) > border_left)  then
-                        RE_Val <= RE_Val - mov_speed;
+                    if (encoder_value > paddle_movl) and ((encoder_value - paddle_length) > border_left)  then
+                        encoder_value <= encoder_value - mov_speed;
                     end if;
                 end if;
-            end if;
+            end if; 
             prevA <= ChA_clean;
         end if;
     end if;
@@ -227,40 +228,40 @@ end process;
     -- VGA Signal Routing
     U1: vga_pll_25_175 port map(CLK, pll_out_clk);
     U2: vga_controller port map(pll_out_clk, '1', h_sync_m, v_sync_m, dispEn, colSignal, rowSignal, open, open);
-    U3: hw_image_generator port map(dispEn, rowSignal, colSignal, RE_Val, digit0, digit1, red_m, green_m, blue_m);
+    U3: hw_image_generator port map(dispEn, rowSignal, colSignal, encoder_value, digit0, digit1, red_m, green_m, blue_m);
     
     -- Decoders for fibonacci numbers to seven segments
-    decoder0: bin2seg7_decoder
+    decoder0: seg7_decoder
         port map(
             fib_number => digit0,
             HEX => HEX0
         );
     
-    decoder1: bin2seg7_decoder
+    decoder1: seg7_decoder
         port map(
             fib_number => digit1,
             HEX => HEX1
         );
     
-    decoder2: bin2seg7_decoder
+    decoder2: seg7_decoder
         port map(
             fib_number => digit2,
             HEX => HEX2
         );
 
-    decoder3: bin2seg7_decoder
+    decoder3: seg7_decoder
         port map(
             fib_number => digit3,
             HEX => HEX3
         );
 
-    decoder4: bin2seg7_decoder
+    decoder4: seg7_decoder
         port map(
             fib_number => digit4,
             HEX => HEX4
         );
 
-    decoder5: bin2seg7_decoder
+    decoder5: seg7_decoder
         port map(
             fib_number => digit5,
             HEX => HEX5

@@ -5,14 +5,14 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-entity bin2seg7_decoder is
+entity seg7_decoder is
     port(
         fib_number : IN integer; -- 4-bit binary input
         HEX : OUT std_logic_vector(6 downto 0)    -- seven segment output   
         );
-end bin2seg7_decoder;
+end seg7_decoder;
 
-architecture behavioral of bin2seg7_decoder is
+architecture behavioral of seg7_decoder is
 
     --seven segment display is active low
     signal sevenSeg : std_logic_vector(6 downto 0) := "1111111";

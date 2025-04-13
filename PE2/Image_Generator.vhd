@@ -9,15 +9,15 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity hw_image_generator is
     port (
-        disp_ena    : in  STD_LOGIC;
-        row         : in  INTEGER;
-        column      : in  INTEGER;
-	    RE_Val	    : in  INTEGER;
-        fib1        : in  INTEGER;
-        fib2        : in  INTEGER;
-        red         : out STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
-        green       : out STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
-        blue        : out STD_LOGIC_VECTOR(7 downto 0) := (others => '0')
+        disp_ena        : in  STD_LOGIC;
+        row             : in  INTEGER;
+        column          : in  INTEGER;
+	    encoder_value   : in  INTEGER;
+        fib1            : in  INTEGER;
+        fib2            : in  INTEGER;
+        red             : out STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+        green           : out STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+        blue            : out STD_LOGIC_VECTOR(7 downto 0) := (others => '0')
     );
 end hw_image_generator;
 
@@ -104,7 +104,7 @@ architecture behavior of hw_image_generator is
 	 
 
 begin	 	 
-    process(disp_ena, row, column, RE_Val, fib1, fib2)
+    process(disp_ena, row, column, encoder_value, fib1, fib2)
         variable paddle_posL : integer;
         variable paddle_posR : integer;
     begin
@@ -113,9 +113,9 @@ begin
         green <= X"00";
         blue  <= X"00"; 
 
-        if disp_ena = '1' then            -- Paddle position based on RE_Val
-            paddle_posL := RE_Val - paddle_width / 2;
-            paddle_posR := RE_Val + paddle_width / 2;
+        if disp_ena = '1' then            -- Paddle position based on encoder_value
+            paddle_posL := encoder_value - paddle_width / 2;
+            paddle_posR := encoder_value + paddle_width / 2;
 
             -- Paddle coloring (White)
             if row >= paddle_top and row <= paddle_bottom and column >= paddle_posL  and column <= paddle_posR then
@@ -156,6 +156,5 @@ begin
                 end loop;
             end if;
         end if;
-		
     end process;
 end behavior;
