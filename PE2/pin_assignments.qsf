@@ -2,8 +2,8 @@
 set_location_assignment PIN_P11 -to CLK
 
 # Rotary Encoder
-set_location_assignment PIN_AB17 -to ChA
-set_location_assignment PIN_AA17 -to ChB
+set_location_assignment PIN_AA19 -to ChA
+set_location_assignment PIN_AB19 -to ChB
 
 # Red VGA 
 set_location_assignment PIN_AA1 -to red_m[0]

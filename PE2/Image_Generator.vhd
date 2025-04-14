@@ -23,9 +23,9 @@ end hw_image_generator;
 
 architecture behavior of hw_image_generator is
 
-    constant block_start_x : integer := 20;
+    constant block_start_x : integer := 25;
     constant block_start_y : integer := 100;
-    constant block_width   : integer := 33;
+    constant block_width   : integer := 35;
     constant block_height  : integer := 10;
     constant block_width_spacing : integer := 7;
     constant block_height_spacing : integer := 5; 
@@ -84,23 +84,21 @@ architecture behavior of hw_image_generator is
     constant column13_right : integer := column13_left + block_width;
     constant column14_left  : integer := column13_right + block_width_spacing;
     constant column14_right : integer := column14_left + block_width;
-    constant column15_left  : integer := column14_right + block_width_spacing;
-    constant column15_right : integer := column15_left + block_width;
 
     -- Column arrary constants for FOR loop
-    type column_array is array(0 to 14) of integer;
+    type column_array is array(0 to 13) of integer;
     constant column_lefts : column_array := (
         column1_left, column2_left, column3_left, column4_left,
         column5_left, column6_left, column7_left, column8_left,
         column9_left, column10_left, column11_left, column12_left,
-        column13_left, column14_left, column15_left
+        column13_left, column14_left
     );
     constant column_rights : column_array := (
         column1_right, column2_right, column3_right, column4_right,
         column5_right, column6_right, column7_right, column8_right,
         column9_right, column10_right, column11_right, column12_right,
-        column13_right, column14_right, column15_right
-    );
+        column13_right, column14_right
+        );
 	 
 
 begin	 	 
@@ -131,7 +129,7 @@ begin
 
                 -- Loop over rows and columns
                 for row_idx in 0 to 1 loop
-                    for col_idx in 0 to 14 loop
+                    for col_idx in 0 to 13 loop
                         if row >= row_tops(row_idx) and row <= row_bottoms(row_idx) and
                            column >= column_lefts(col_idx) and column <= column_rights(col_idx) then
                             if ((fib1 = 1) and (fib2 = 0) and (col_idx = 0) and (row_idx = 0)) then

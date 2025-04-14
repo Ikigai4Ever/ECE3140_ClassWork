@@ -43,15 +43,17 @@ architecture Behavioral of top_entity is
     constant paddle_movr  : integer := 600;
 
     -- Fibonacci Signals
-    signal fib0, fib1 : unsigned(31 downto 0) := (others => '0');
+    signal fib0       : unsigned(31 downto 0) := to_unsigned(0, 32);
+    signal fib1       : unsigned(31 downto 0) := to_unsigned(1, 32);
     signal digit0, digit1, digit2, digit3, digit4, digit5 : integer;
-    signal clk_div    : integer := 0;
-    signal tick       : std_logic := '0';
-    signal tick_pulse : std_logic := '0';
+    signal clk_div     : unsigned(25 downto 0) := (others => '0');
+    signal tick        : std_logic := '0';
+    signal clean_KEY0  : std_logic := '0';
 
     constant CLK_FREQ      : integer := 50000000; -- 50 MHz
-    constant FORWARD_TICKS : integer := CLK_FREQ;
-    constant REVERSE_TICKS : integer := CLK_FREQ * 4 / 10;
+    constant CLK_FREQ_DIV : integer := 20000000; -- 20 MHz
+    constant FORWARD_TICKS : unsigned(25 downto 0) := to_unsigned(CLK_FREQ, 26); -- 1 sec
+    constant REVERSE_TICKS : unsigned(25 downto 0) := to_unsigned(CLK_FREQ_DIV, 26); -- 0.4 sec
 
     -- VGA Signals
     signal pll_out_clk : std_logic;
@@ -130,7 +132,7 @@ begin
         variable temp : integer;
     begin 
         if rising_edge(CLK) then
-            temp := to_integer(fib0);
+            temp := to_integer(fib1);
             
             -- Calculate the digits of the Fibonacci number
             digit0 <= temp mod 10; temp := temp / 10;
@@ -142,63 +144,37 @@ begin
         end if;
     end process;
         
-    -- Fibonacci Clock Divider Process
-    fib_clk_divider : process(CLK)
-    begin
-        if rising_edge(CLK) then
-            clk_div <= clk_div + 1;
-
-            if ((KEY0 = '1' and clk_div >= FORWARD_TICKS) or
-                (KEY0 = '0' and clk_div >= REVERSE_TICKS)) then
-                tick <= '1';
-                clk_div <= 0;
-            else
-                tick <= '0';
-            end if;
-        end if;
-    end process;
-
-    -- Tick Pulse Registration
-    tick_register : process(CLK)
-    begin
-        if rising_edge(CLK) then
-            tick_pulse <= tick;
-        end if;
-    end process;
-
-    -- Fibonacci Sequence Computation
-    fibonacci_logic : process(CLK)
+    process(CLK)
         variable next_value : unsigned(31 downto 0);
     begin
         if rising_edge(CLK) then
-            if tick_pulse = '1' then
-                if (fib0 = 0 and fib1 = 0) then
-                    fib0 <= to_unsigned(0, 32);
-                    fib1 <= to_unsigned(1, 32);
-                elsif (KEY0 = '1') then
+            -- Tick generation
+            clk_div <= clk_div + 1;
+            if (clean_KEY0 = '1' and clk_div >= FORWARD_TICKS) or
+                (clean_KEY0 = '0' and clk_div >= REVERSE_TICKS) then
+                tick    <= '1';
+                clk_div <= (others => '0');
+            else
+                tick <= '0';
+            end if;
+
+            -- Fibonacci logic
+            if tick = '1' then
+                if KEY0 = '1' then  -- Increment Fibonacci
                     next_value := fib0 + fib1;
-                    if (next_value <= to_unsigned(999999, 32)) then
-                        fib0 <= fib1;
-                        fib1 <= next_value;
-                    else
-                        -- Reset if out of range
-                        fib0 <= to_unsigned(0, 32);
-                        fib1 <= to_unsigned(1, 32);
-                    end if;
-                else
-                    if (fib1 > fib0) then
+                    fib0 <= fib1;
+                    fib1 <= next_value;
+                else  -- Decrement Fibonacci
+                    if fib1 > fib0 then
                         next_value := fib1 - fib0;
                         fib1 <= fib0;
                         fib0 <= next_value;
-                    else
-                        -- Reset in case of invalid backward subtraction
-                        fib0 <= to_unsigned(0, 32);
-                        fib1 <= to_unsigned(1, 32);
                     end if;
                 end if;
             end if;
         end if;
     end process;
+
 
 
     
@@ -274,17 +250,25 @@ end process;
 
 
     -- Debouncers for the rortary encoder signals
-    debounce_ChA: entity work.Debounce
+    debounce_ChA : entity work.Debounce
         port map (
             clk   => CLK,
             noisy => ChA,
             clean => ChA_clean
         );
 
-    debounce_ChB: entity work.Debounce
+    debounce_ChB : entity work.Debounce
         port map (
             clk   => CLK,
             noisy => ChB,
             clean => ChB_clean
+        );
+
+    -- Debouncer for KEYs
+    debounce_KEY0 : entity work.Debounce
+        port map (
+            clk   => CLK,
+            noisy => KEY0,
+            clean => clean_KEY0
         );
 end Behavioral;  
