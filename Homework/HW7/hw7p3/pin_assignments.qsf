@@ -1,40 +1,27 @@
-# Pin assignments for DE10-Lite VGA project
+# DE10 50MH Clock
+set_location_assignment PIN_P11 -to CLK
 
-# Clock inputs
-set_location_assignment PIN_1  -to pixel_clk_m  # Pixel clock (25.175 MHz or your chosen pixel clock)
-set_location_assignment PIN_2  -to clk          # 50 MHz clock from DE10-Lite board
+# Red VGA 
+set_location_assignment PIN_AA1 -to red_m[0]
+set_location_assignment PIN_V1 -to red_m[1]
+set_location_assignment PIN_Y2 -to red_m[2]
+set_location_assignment PIN_Y1 -to red_m[3]
 
-# Reset button
-set_location_assignment PIN_3  -to reset_n_m   # Active-low reset for the VGA controller
+# Green VGA
+set_location_assignment PIN_W1 -to green_m[0]
+set_location_assignment PIN_T2 -to green_m[1]
+set_location_assignment PIN_R2 -to green_m[2]
+set_location_assignment PIN_R1 -to green_m[3]
 
-# VGA Signals
-set_location_assignment PIN_4  -to h_sync_m     # Horizontal sync output for VGA
-set_location_assignment PIN_5  -to v_sync_m     # Vertical sync output for VGA
-set_location_assignment PIN_6  -to red_m        # Red color output for VGA
-set_location_assignment PIN_7  -to green_m      # Green color output for VGA
-set_location_assignment PIN_8  -to blue_m       # Blue color output for VGA
+# Blue VGA
+set_location_assignment PIN_P1 -to blue_m[0]
+set_location_assignment PIN_T1 -to blue_m[1]
+set_location_assignment PIN_P4 -to blue_m[2]
+set_location_assignment PIN_N2 -to blue_m[3]
 
-# Switches for color selection
-set_location_assignment PIN_9  -to switches_m   # 3 switches for color selection (can map to switches on DE10-Lite)
+# VGA Location
+set_location_assignment PIN_N3 -to h_sync_m
+set_location_assignment PIN_N1 -to v_sync_m
 
-# Key button for reset functionality
-set_location_assignment PIN_10 -to key_m        # Key button to reset color shifting
-
-# Accelerometer SPI signals
-set_location_assignment PIN_11 -to SPI_SDI      # SPI Data In (Accelerometer)
-set_location_assignment PIN_12 -to SPI_SDO      # SPI Data Out (Accelerometer)
-set_location_assignment PIN_13 -to SPI_CSN      # SPI Chip Select (Accelerometer)
-set_location_assignment PIN_14 -to SPI_CLK      # SPI Clock (Accelerometer)
-
-# Accelerometer data outputs (for X, Y, Z axis)
-set_location_assignment PIN_15 -to data_x       # Accelerometer X-axis data (16-bit)
-set_location_assignment PIN_16 -to data_y       # Accelerometer Y-axis data (16-bit)
-set_location_assignment PIN_17 -to data_z       # Accelerometer Z-axis data (16-bit)
-
-# Push buttons for color shifting (may map to KEY0, KEY1, etc.)
-set_location_assignment PIN_18 -to shift_red_left  # Shift left signal for red
-set_location_assignment PIN_19 -to shift_red_right # Shift right signal for red
-set_location_assignment PIN_20 -to shift_green_left  # Shift left signal for green
-set_location_assignment PIN_21 -to shift_green_right # Shift right signal for green
-
-# Add more pin assignments as needed based on your design
+# KEYS
+set_location_assignment PIN_B8 -to KEY0
