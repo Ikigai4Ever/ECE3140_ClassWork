@@ -1,5 +1,6 @@
 # DE10 50MH Clock
-set_location_assignment PIN_P11 -to CLK
+set_location_assignment PIN_P11 -to pixel_clk_m
+
 
 # Red VGA 
 set_location_assignment PIN_AA1 -to red_m[0]
@@ -24,4 +25,4 @@ set_location_assignment PIN_N3 -to h_sync_m
 set_location_assignment PIN_N1 -to v_sync_m
 
 # KEYS
-set_location_assignment PIN_B8 -to KEY0
+set_location_assignment PIN_B8 -to key_m
