@@ -1,0 +1,40 @@
+# Pin assignments for DE10-Lite VGA project
+
+# Clock inputs
+set_location_assignment PIN_1  -to pixel_clk_m  # Pixel clock (25.175 MHz or your chosen pixel clock)
+set_location_assignment PIN_2  -to clk          # 50 MHz clock from DE10-Lite board
+
+# Reset button
+set_location_assignment PIN_3  -to reset_n_m   # Active-low reset for the VGA controller
+
+# VGA Signals
+set_location_assignment PIN_4  -to h_sync_m     # Horizontal sync output for VGA
+set_location_assignment PIN_5  -to v_sync_m     # Vertical sync output for VGA
+set_location_assignment PIN_6  -to red_m        # Red color output for VGA
+set_location_assignment PIN_7  -to green_m      # Green color output for VGA
+set_location_assignment PIN_8  -to blue_m       # Blue color output for VGA
+
+# Switches for color selection
+set_location_assignment PIN_9  -to switches_m   # 3 switches for color selection (can map to switches on DE10-Lite)
+
+# Key button for reset functionality
+set_location_assignment PIN_10 -to key_m        # Key button to reset color shifting
+
+# Accelerometer SPI signals
+set_location_assignment PIN_11 -to SPI_SDI      # SPI Data In (Accelerometer)
+set_location_assignment PIN_12 -to SPI_SDO      # SPI Data Out (Accelerometer)
+set_location_assignment PIN_13 -to SPI_CSN      # SPI Chip Select (Accelerometer)
+set_location_assignment PIN_14 -to SPI_CLK      # SPI Clock (Accelerometer)
+
+# Accelerometer data outputs (for X, Y, Z axis)
+set_location_assignment PIN_15 -to data_x       # Accelerometer X-axis data (16-bit)
+set_location_assignment PIN_16 -to data_y       # Accelerometer Y-axis data (16-bit)
+set_location_assignment PIN_17 -to data_z       # Accelerometer Z-axis data (16-bit)
+
+# Push buttons for color shifting (may map to KEY0, KEY1, etc.)
+set_location_assignment PIN_18 -to shift_red_left  # Shift left signal for red
+set_location_assignment PIN_19 -to shift_red_right # Shift right signal for red
+set_location_assignment PIN_20 -to shift_green_left  # Shift left signal for green
+set_location_assignment PIN_21 -to shift_green_right # Shift right signal for green
+
+# Add more pin assignments as needed based on your design
